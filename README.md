@@ -70,9 +70,10 @@ CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB
 
 ---
 
-## 📸 Contract Explorer View
+## 📸 Contract Explorer View <img width="1914" height="905" alt="image" src="https://github.com/user-attachments/assets/1e2a739c-0d22-4b65-b54d-231eac8cf340" />
 
-![Stellar Lab Contract Explorer](screenshots/contract-explorer.png)
+
+
 
 **Contract Information:**
 - ✅ **Status:** Active & Deployed
