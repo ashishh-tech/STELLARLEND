@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Layers } from 'lucide-react';
+import { X, Layers, Activity } from 'lucide-react';
 
 export default function AssetModal({ asset, type, onClose, onConfirm }) {
   const [amount, setAmount] = useState('');
