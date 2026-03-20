@@ -15,12 +15,49 @@
   --accent: #10B981;
 }
 
-body {
+html {
   background-color: var(--background);
+}
+
+body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Ambient Glowing Background Orbs */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  width: 900px;
+  height: 900px;
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(140px);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: float 20s infinite alternate;
+}
+
+body::before {
+  top: -200px;
+  left: -200px;
+  background: radial-gradient(circle, var(--color-brand-emerald) 0%, transparent 70%);
+}
+
+body::after {
+  bottom: -200px;
+  right: -200px;
+  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  animation-duration: 25s;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(100px, 100px); }
 }
 
 /* Custom scrollbar for premium feel */

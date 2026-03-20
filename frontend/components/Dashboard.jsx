@@ -101,72 +101,78 @@ export default function Dashboard() {
   const barColor = isHealthy ? 'bg-brand-emerald' : isWarning ? 'bg-yellow-400' : 'bg-red-500';
 
   return (
-    <div className="container mx-auto px-6 py-12 max-w-6xl">
+    <div className="container mx-auto px-6 py-12 max-w-6xl relative z-10">
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-brand-slate-light border border-brand-slate-border rounded-2xl p-6 shadow-lg relative overflow-hidden group hover:border-brand-emerald/50 transition-colors">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-            <ArrowUpCircle size={100} className="text-brand-emerald" />
+        <div className="bg-brand-slate-light/40 backdrop-blur-xl border border-brand-slate-border/50 rounded-2xl p-8 shadow-2xl relative overflow-hidden group hover:border-brand-emerald/50 hover:shadow-[0_8px_30px_rgba(16,185,129,0.2)] transition-all duration-300">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-125 transition-transform duration-700">
+            <ArrowUpCircle size={140} className="text-brand-emerald" />
           </div>
           <div className="flex items-center gap-3 text-brand-emerald mb-4 relative z-10">
-            <ArrowUpCircle />
-            <h3 className="text-lg font-semibold text-white">Your Supplies</h3>
+            <div className="p-2 bg-brand-emerald/10 rounded-lg">
+               <ArrowUpCircle size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-white tracking-wide">Your Supplies</h3>
           </div>
-          <div className="text-5xl font-bold font-mono relative z-10 transition-all duration-500">{fmt(totalSupplied)}</div>
-          <p className="text-muted mt-2 text-sm relative z-10">
-            Net APY: <span className="text-brand-emerald font-bold">{weightedSupplyApy.toFixed(2)}%</span>
+          <div className="text-5xl font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 relative z-10 transition-all duration-500 mb-2">{fmt(totalSupplied)}</div>
+          <p className="text-muted mt-2 text-sm relative z-10 font-medium tracking-wide">
+            NET APY: <span className="text-brand-emerald font-bold drop-shadow-md bg-brand-emerald/10 px-2 py-1 rounded-md ml-1">{weightedSupplyApy.toFixed(2)}%</span>
           </p>
         </div>
 
-        <div className="bg-brand-slate-light border border-brand-slate-border rounded-2xl p-6 shadow-lg relative overflow-hidden group hover:border-red-400/50 transition-colors">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-            <ArrowDownCircle size={100} className="text-red-400" />
+        <div className="bg-brand-slate-light/40 backdrop-blur-xl border border-brand-slate-border/50 rounded-2xl p-8 shadow-2xl relative overflow-hidden group hover:border-red-400/50 hover:shadow-[0_8px_30px_rgba(248,113,113,0.2)] transition-all duration-300">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-125 transition-transform duration-700">
+            <ArrowDownCircle size={140} className="text-red-400" />
           </div>
           <div className="flex items-center gap-3 text-red-400 mb-4 relative z-10">
-            <ArrowDownCircle />
-            <h3 className="text-lg font-semibold text-white">Your Borrows</h3>
+            <div className="p-2 bg-red-400/10 rounded-lg">
+               <ArrowDownCircle size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-white tracking-wide">Your Borrows</h3>
           </div>
-          <div className="text-5xl font-bold font-mono relative z-10 transition-all duration-500">{fmt(totalBorrowed)}</div>
-          <p className="text-muted mt-2 text-sm relative z-10">
-            Borrow Limit: <span className="text-yellow-400 font-bold">{fmt(borrowLimit)}</span>
+          <div className="text-5xl font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 relative z-10 transition-all duration-500 mb-2">{fmt(totalBorrowed)}</div>
+          <p className="text-muted mt-2 text-sm relative z-10 font-medium tracking-wide">
+            BORROW LIMIT: <span className="text-yellow-400 font-bold drop-shadow-md bg-yellow-400/10 px-2 py-1 rounded-md ml-1">{fmt(borrowLimit)}</span>
           </p>
         </div>
       </div>
 
       {/* Persistent Portfolio Health Bar */}
-      <div className="mb-12 p-5 bg-brand-slate-light border border-brand-slate-border rounded-2xl flex flex-col gap-3 shadow-lg">
+      <div className="mb-12 p-6 bg-brand-slate-light/40 backdrop-blur-xl border border-brand-slate-border/50 rounded-2xl flex flex-col gap-4 shadow-2xl">
         <div className="flex justify-between items-center w-full">
-          <div className="flex items-center gap-2">
-             <TrendingUp className={healthColor} size={20} />
-             <span className="text-white font-bold">Portfolio Health</span>
+          <div className="flex items-center gap-3">
+             <div className={`p-2 rounded-lg bg-opacity-10 ${isHealthy ? 'bg-brand-emerald' : isWarning ? 'bg-yellow-400' : 'bg-red-500'}`}>
+                <TrendingUp className={healthColor} size={24} />
+             </div>
+             <span className="text-white font-bold tracking-wide text-lg">Portfolio Health</span>
           </div>
-          <span className={`text-lg font-bold font-mono ${healthColor}`}>
+          <span className={`text-xl font-extrabold font-mono drop-shadow-md ${healthColor}`}>
              {healthPct.toFixed(1)}%
           </span>
         </div>
-        <div className="w-full h-3 bg-brand-slate rounded-full overflow-hidden shadow-inner">
+        <div className="w-full h-4 bg-[#0F172A]/80 rounded-full overflow-hidden shadow-inner border border-brand-slate-border/30">
           <div
-            className={`h-full rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(0,0,0,0.5)] ${barColor}`}
+            className={`h-full rounded-full transition-all duration-700 shadow-[0_0_15px_rgba(0,0,0,0.6)] ${barColor}`}
             style={{ width: `${healthPct}%` }}
           />
         </div>
-        <div className="flex justify-between text-xs text-muted mt-1 font-mono uppercase tracking-wider">
+        <div className="flex justify-between text-xs text-muted mt-1 font-mono uppercase tracking-widest font-semibold opacity-70">
            <span>Liquidated (0%)</span>
            <span>Safe (100%)</span>
         </div>
       </div>
 
-      <div className="bg-brand-emerald/10 border border-brand-emerald/30 rounded-2xl p-6 mb-12 shadow-lg flex items-center justify-between">
+      <div className="bg-brand-emerald/10 backdrop-blur-xl border border-brand-emerald/30 rounded-2xl p-6 mb-12 shadow-[0_8px_30px_rgba(16,185,129,0.1)] flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-white mb-2">Deployed Soroban Contract</h3>
-          <p className="text-muted font-mono text-sm">Contract ID: <span className="text-brand-emerald">CAM2KFCN7W6AEMO7EAIO3CZ7CXEOPE3XNM3SNFXJFPS2KDDX4554AQWJ</span></p>
+          <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse"></span> Deployed Soroban Contract</h3>
+          <p className="text-muted font-mono text-sm tracking-wide">Contract ID: <span className="text-brand-emerald bg-brand-emerald/10 px-2 py-1 rounded opacity-90">{`CAM2KFCN7W6AEMO7...4554AQWJ`}</span></p>
         </div>
         <div className="flex gap-4">
           <a
             href="https://stellar.expert/explorer/testnet/contract/CAM2KFCN7W6AEMO7EAIO3CZ7CXEOPE3XNM3SNFXJFPS2KDDX4554AQWJ"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 bg-brand-emerald hover:bg-brand-emerald-hover text-brand-slate rounded-xl font-bold transition-all"
+            className="px-6 py-3 bg-brand-emerald hover:bg-brand-emerald-hover hover:scale-105 text-brand-slate rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)]"
           >
             View on Stellar Expert
           </a>
@@ -174,21 +180,23 @@ export default function Dashboard() {
       </div>
 
       {/* Markets Table */}
-      <h2 className="text-2xl font-bold text-white mb-6">Lending Markets</h2>
-      <div className="bg-brand-slate-light border border-brand-slate-border rounded-2xl overflow-hidden shadow-lg">
+      <h2 className="text-3xl font-bold text-white mb-6 tracking-wide drop-shadow-sm flex items-center gap-3">
+         Lending Markets
+      </h2>
+      <div className="bg-brand-slate-light/40 backdrop-blur-xl border border-brand-slate-border/50 rounded-2xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-brand-slate-border bg-brand-slate/50">
-                <th className="p-4 text-muted font-medium">Asset</th>
-                <th className="p-4 text-muted font-medium">Wallet Balance</th>
-                <th className="p-4 text-muted font-medium">Supply APY</th>
-                <th className="p-4 text-muted font-medium">Borrow APY</th>
-                <th className="p-4 text-muted font-medium">Your Position</th>
-                <th className="p-4 text-muted font-medium text-right">Actions</th>
+              <tr className="border-b border-brand-slate-border bg-black/20">
+                <th className="p-6 text-muted font-semibold tracking-wider uppercase text-xs">Asset</th>
+                <th className="p-6 text-muted font-semibold tracking-wider uppercase text-xs">Wallet Balance</th>
+                <th className="p-6 text-muted font-semibold tracking-wider uppercase text-xs">Supply APY</th>
+                <th className="p-6 text-muted font-semibold tracking-wider uppercase text-xs">Borrow APY</th>
+                <th className="p-6 text-muted font-semibold tracking-wider uppercase text-xs">Your Position</th>
+                <th className="p-6 text-muted font-semibold tracking-wider uppercase text-xs text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-brand-slate-border">
+            <tbody className="divide-y divide-brand-slate-border/50">
               {ASSETS.map(asset => {
                 const pos = positions[asset.id];
                 const displayBalance = realXlmBalance !== null && asset.id === 'xlm' 

@@ -31,11 +31,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full h-20 border-b border-brand-slate-border bg-brand-slate/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="container mx-auto h-full px-6 flex items-center justify-between">
-        
-        {/* Brand Logo */}
-        <div className="flex items-center gap-3">
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-xl bg-brand-slate/80 border-b border-brand-slate-border shadow-[0_4px_30px_rgba(0,0,0,0.3)] transition-all">
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Brand */}
+        <div className="flex items-center gap-3 cursor-pointer group">
           <div className="w-10 h-10 rounded-xl bg-brand-emerald flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)]">
             <Activity size={24} className="text-brand-slate" />
           </div>

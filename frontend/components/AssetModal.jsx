@@ -22,13 +22,18 @@ export default function AssetModal({ asset, type, onClose, onConfirm }) {
   const isSupply = type === 'supply';
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-slate/80 backdrop-blur-sm p-4">
-      <div className="bg-brand-slate-light border border-brand-slate-border rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-brand-slate-border">
-          <h3 className="text-xl font-bold text-white capitalize">{type} {asset.symbol}</h3>
-          <button onClick={onClose} className="text-muted hover:text-white transition-colors">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-slate/60 backdrop-blur-xl animate-in fade-in duration-300">
+      <div className="bg-brand-slate-light border border-brand-slate-border rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="px-6 py-4 border-b border-brand-slate-border flex justify-between items-center bg-brand-slate/50">
+          <h3 className="text-lg font-bold text-white capitalize flex items-center gap-2">
+            {type === 'supply' ? (
+              <Activity className="text-brand-emerald" size={20} />
+            ) : (
+              <Activity className="text-red-400" size={20} />
+            )}
+            {type} {asset.symbol}
+          </h3>
+          <button onClick={onClose} className="text-muted hover:text-white transition-colors p-1 rounded-full hover:bg-brand-slate">
             <X size={20} />
           </button>
         </div>
