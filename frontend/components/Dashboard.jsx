@@ -5,7 +5,7 @@ import { ArrowUpCircle, ArrowDownCircle, Coins, TrendingUp } from 'lucide-react'
 import AssetModal from './AssetModal';
 import * as StellarSdk from 'stellar-sdk';
 
-const CONTRACT_ID = 'CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB';
+const CONTRACT_ID = 'CAQWXHETDAG33F33A54SWQQFS2UQTIGPLSVKKKLVUJLH42A7V6MXQL2B';
 const SERVER_URL = 'https://soroban-testnet.stellar.org';
 const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
 
