@@ -52,57 +52,78 @@ All operations are executed on-chain using Soroban smart contracts, ensuring tru
 
 ---
 
-## 🌐 Deployed Smart Contract Links
+## 🌐 Deployed Smart Contract (Testnet)
 
-### 🔗 **Contract Explorer (Stellar Lab)**
-https://lab.stellar.org/r/testnet/contract/CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB
-
-### 🔗 **Transaction Details (Stellar Expert)**
-https://stellar.expert/explorer/testnet/tx/3f0794b14fb131c81e5982925f4c971367b6efbdd314d6848bd17cd4c38a1688
+### 🔗 **Contract Explorer (Stellar Expert)**
+https://stellar.expert/explorer/testnet/contract/CAM2KFCN7W6AEMO7EAIO3CZ7CXEOPE3XNM3SNFXJFPS2KDDX4554AQWJ
 
 ### **Contract ID**
 ```
-CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB
+CAM2KFCN7W6AEMO7EAIO3CZ7CXEOPE3XNM3SNFXJFPS2KDDX4554AQWJ
 ```
-
-**Network:** Testnet  
-**Deployment Date:** Thu, Mar 19, 2026, 08:10:30 UTC
 
 ---
 
-## 📸 Contract Explorer View <img width="1914" height="905" alt="image" src="https://github.com/user-attachments/assets/1e2a739c-0d22-4b65-b54d-231eac8cf340" />
+## 📸 Project Showcase
 
+### **1. Premium Lending Dashboard**
+The frontend features a high-end glassmorphism design with animated background orbs, real-time Stellar balance fetching, and a dynamic portfolio health tracker.
 
+![StellarLend Dashboard](screenshots/dashboard.png)
 
+### **2. On-Chain Contract Verification**
+Proof of deployment on the Stellar Testnet as seen on Stellar Expert.
 
-**Contract Information:**
-- ✅ **Status:** Active & Deployed
-- 📅 **Created:** Thu, Mar 19, 2026, 08:10:30 UTC
-- 👤 **Creator:** `GCIGHCBN77IE6UYVNWA2FJAKKR7MI4CSL736LSMPAL4KETT3X4IOKGEU`
-- 🔐 **WASM Hash:** `fd69da804c08ec8a56dc98fc46cc07568f651edcdee...`
-- 💾 **Storage:** 1 entry
-- 🔧 **Build Status:** Build Unverified (Ready for use)
+![Stellar Expert Verification](screenshots/stellar_expert.png)
 
-The contract is live and ready for interaction via the Stellar Lab or through your Freighter wallet!
+---
+
+## 🎨 UI/UX Features (Frontend)
+
+*   **Next.js 14 App Router** for speed and SEO.
+*   **Glassmorphism Aesthetic** with `backdrop-blur` and glowing ambient orbs.
+*   **Freighter Wallet Integration** for secure transaction signing.
+*   **Real-time Data** fetching via Horizon Testnet API.
+*   **Responsive Health Bar** calculating borrow limits on-the-fly.
 
 ---
 
 ## 📁 Project Structure
 
-This repository uses the recommended structure for a Soroban project:
-
 ```text
 .
-├── contracts
-│   └── hello-world
-│       ├── src
-│       │   ├── lib.rs
-│       │   └── test.rs
-│       └── Cargo.toml
-├── Cargo.toml
-├── README.md
-└── EXPLORER_LINKS.md
+├── frontend/             # Next.js 14 Web Application
+├── contracts/            # Soroban Smart Contracts (Rust)
+├── screenshots/          # Project visual showcases
+├── Cargo.toml            # Workspace configuration
+└── README.md             # Project documentation
 ```
+
+---
+
+## 🛠️ How to Run Locally
+
+### **Frontend**
+1. Enter the directory: `cd frontend`
+2. Install dependencies: `npm install`
+3. Run development server: `npm run dev`
+
+### **Smart Contract**
+1. Build the contract: `cargo build --target wasm32-unknown-unknown --release`
+2. Deploy using Stellar CLI.
+
+---
+
+## 👨‍💻 Author
+
+**Ashish Chaurasia**  
+[GitHub Profile](https://github.com/ashishh-tech)
+
+---
+
+## 📜 License
+
+MIT License
 
 - New Soroban contracts can be put in `contracts`, each in their own directory.
 - Contracts should have their own `Cargo.toml` files that rely on the top-level `Cargo.toml` workspace for their dependencies.
