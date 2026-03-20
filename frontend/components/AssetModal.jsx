@@ -41,21 +41,19 @@ export default function AssetModal({ asset, type, onClose, onConfirm }) {
         StellarSdk.nativeToScVal(amountRaw, { type: 'i128' })
       ];
 
-      // Build Transaction
-      const accountRes = await server.getLatestLedger();
+      // 1. Fetch current sequence from Horizon
+      const horizonRes = await fetch(`https://horizon-testnet.stellar.org/accounts/${userAddress}`);
+      const accountData = await horizonRes.json();
+      const nextSequence = (BigInt(accountData.sequence) + 1n).toString();
+
+      // 2. Build Transaction
       const tx = new StellarSdk.TransactionBuilder(
-        new StellarSdk.Account(userAddress, '0'),
+        new StellarSdk.Account(userAddress, nextSequence),
         { fee: '1000', networkPassphrase: NETWORK_PASSPHRASE }
       )
         .addOperation(contract.call(functionName, ...args))
         .setTimeout(30)
         .build();
-
-      // Prepare/Simulate to fetch correct foot-print and current sequence
-      // Note: in a real app, you'd fetch the account sequence from Horizon
-      const horizonRes = await fetch(`https://horizon-testnet.stellar.org/accounts/${userAddress}`);
-      const accountData = await horizonRes.json();
-      tx.sequence = (BigInt(accountData.sequence) + 1n).toString();
 
       const simResponse = await server.simulateTransaction(tx);
       if (!StellarSdk.SorobanRpc.Api.isSimulationSuccess(simResponse)) {
