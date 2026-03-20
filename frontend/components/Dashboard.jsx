@@ -56,9 +56,7 @@ export default function Dashboard() {
 
             const simResponse = await server.simulateTransaction(tx);
             if (StellarSdk.SorobanRpc.Api.isSimulationSuccess(simResponse)) {
-              const resultXdr = simResponse.result.retval;
-              // Parse ScVal from XDR string
-              const resultScVal = StellarSdk.xdr.ScVal.fromXDR(resultXdr, 'base64');
+              const resultScVal = simResponse.result.retval;
               const accountData = StellarSdk.scValToNative(resultScVal);
               
               if (accountData) {
