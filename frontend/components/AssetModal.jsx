@@ -2,6 +2,12 @@
 
 import { useState } from 'react';
 import { X, Layers, Activity } from 'lucide-react';
+import * as StellarSdk from 'stellar-sdk';
+import { isConnected, getAddress, signTransaction } from "@stellar/freighter-api";
+
+const CONTRACT_ID = 'CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB';
+const SERVER_URL = 'https://soroban-testnet.stellar.org';
+const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
 
 export default function AssetModal({ asset, type, onClose, onConfirm }) {
   const [amount, setAmount] = useState('');
@@ -12,11 +18,81 @@ export default function AssetModal({ asset, type, onClose, onConfirm }) {
     if (!amount || parseFloat(amount) <= 0) return;
     setLoading(true);
 
-    // Simulate a blockchain round-trip delay
-    setTimeout(() => {
+    try {
+      const connResult = await isConnected();
+      if (!(connResult?.isConnected ?? connResult)) {
+        alert("Please connect your Freighter wallet.");
+        setLoading(false);
+        return;
+      }
+
+      const addrResult = await getAddress();
+      const userAddress = addrResult?.address ?? addrResult;
+
+      const server = new StellarSdk.SorobanRpc.Server(SERVER_URL);
+      const contract = new StellarSdk.Contract(CONTRACT_ID);
+      
+      // Determine function name and arguments
+      const functionName = type === 'supply' ? 'deposit' : 'borrow';
+      const amountRaw = BigInt(Math.floor(parseFloat(amount) * 10**7)); // 7 decimals
+      
+      const args = [
+        new StellarSdk.Address(userAddress).toScVal(),
+        StellarSdk.nativeToScVal(amountRaw, { type: 'i128' })
+      ];
+
+      // Build Transaction
+      const accountRes = await server.getLatestLedger();
+      const tx = new StellarSdk.TransactionBuilder(
+        new StellarSdk.Account(userAddress, '0'),
+        { fee: '1000', networkPassphrase: NETWORK_PASSPHRASE }
+      )
+        .addOperation(contract.call(functionName, ...args))
+        .setTimeout(30)
+        .build();
+
+      // Prepare/Simulate to fetch correct foot-print and current sequence
+      // Note: in a real app, you'd fetch the account sequence from Horizon
+      const horizonRes = await fetch(`https://horizon-testnet.stellar.org/accounts/${userAddress}`);
+      const accountData = await horizonRes.json();
+      tx.sequence = (BigInt(accountData.sequence) + 1n).toString();
+
+      const simResponse = await server.simulateTransaction(tx);
+      if (!StellarSdk.SorobanRpc.Api.isSimulationSuccess(simResponse)) {
+        throw new Error("Simulation failed: " + JSON.stringify(simResponse));
+      }
+
+      const finalTx = StellarSdk.SorobanRpc.assembleTransaction(tx, simResponse).build();
+      
+      // Sign with Freighter
+      const signedTxXdr = await signTransaction(finalTx.toXDR(), { networkPassphrase: NETWORK_PASSPHRASE });
+      
+      // Submit
+      const sendResponse = await server.sendTransaction(StellarSdk.TransactionBuilder.fromXDR(signedTxXdr, NETWORK_PASSPHRASE));
+      
+      if (sendResponse.status === 'PENDING') {
+         // Wait for status
+         let status = 'PENDING';
+         while (status === 'PENDING') {
+           await new Promise(r => setTimeout(r, 2000));
+           const txStatus = await server.getTransaction(sendResponse.hash);
+           status = txStatus.status;
+           if (status === 'SUCCESS') {
+             setLoading(false);
+             onConfirm();
+           } else if (status === 'FAILED') {
+             throw new Error("Transaction failed on chain");
+           }
+         }
+      } else {
+        throw new Error("Failed to send transaction: " + sendResponse.status);
+      }
+
+    } catch (e) {
+      console.error("Transaction Error:", e);
+      alert("Transaction failed: " + e.message);
       setLoading(false);
-      onConfirm(asset.id, type, amount); // update parent state
-    }, 1200);
+    }
   };
 
   const isSupply = type === 'supply';

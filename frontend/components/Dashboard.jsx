@@ -3,6 +3,11 @@
 import { useState, useEffect } from 'react';
 import { ArrowUpCircle, ArrowDownCircle, Coins, TrendingUp } from 'lucide-react';
 import AssetModal from './AssetModal';
+import * as StellarSdk from 'stellar-sdk';
+
+const CONTRACT_ID = 'CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB';
+const SERVER_URL = 'https://soroban-testnet.stellar.org';
+const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
 
 const ASSETS = [
   { id: 'xlm', symbol: 'XLM', name: 'Stellar Lumens', supplyApy: 4.2, borrowApy: 6.8, available: '0', price: 0.11 },
@@ -12,35 +17,67 @@ export default function Dashboard() {
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [actionType, setActionType] = useState(null);
   const [realXlmBalance, setRealXlmBalance] = useState(null);
+  const [address, setAddress] = useState(null);
 
   const [positions, setPositions] = useState({});
 
   useEffect(() => {
-    const fetchRealBalance = async () => {
+    const fetchBlockchainData = async () => {
       try {
         const { isConnected, getAddress } = await import('@stellar/freighter-api');
         const connResult = await isConnected();
         if (connResult?.isConnected ?? connResult) {
           const addrResult = await getAddress();
-          const address = addrResult?.address ?? addrResult;
-          if (address && typeof address === 'string') {
-            const res = await fetch(`https://horizon-testnet.stellar.org/accounts/${address}`);
+          const userAddress = addrResult?.address ?? addrResult;
+          if (userAddress && typeof userAddress === 'string') {
+            setAddress(userAddress);
+            
+            // 1. Fetch XLM Balance from Horizon
+            const res = await fetch(`https://horizon-testnet.stellar.org/accounts/${userAddress}`);
             if (res.ok) {
               const data = await res.json();
               const xlm = data.balances?.find(b => b.asset_type === 'native')?.balance;
               if (xlm) setRealXlmBalance(parseFloat(xlm));
             }
+
+            // 2. Fetch Account Data from Soroban Contract
+            const server = new StellarSdk.SorobanRpc.Server(SERVER_URL);
+            const contract = new StellarSdk.Contract(CONTRACT_ID);
+            
+            // Call get_account_data(user)
+            const getAccountDataArgs = [new StellarSdk.Address(userAddress).toScVal()];
+            const tx = new StellarSdk.TransactionBuilder(
+              new StellarSdk.Account(userAddress, '0'),
+              { fee: '100', networkPassphrase: NETWORK_PASSPHRASE }
+            )
+              .addOperation(contract.call('get_account_data', ...getAccountDataArgs))
+              .setTimeout(30)
+              .build();
+
+            const simResponse = await server.simulateTransaction(tx);
+            if (StellarSdk.SorobanRpc.Api.isSimulationSuccess(simResponse)) {
+              const result = simResponse.result.retval;
+              // Parse AccountData struct { supplied, borrowed }
+              // This is a simplified parsing for the demo
+              const accountData = StellarSdk.scValToNative(result);
+              if (accountData) {
+                setPositions({
+                  xlm: {
+                    supplied: Number(accountData.supplied) / 10**7, // Assuming 7 decimals
+                    borrowed: Number(accountData.borrowed) / 10**7,
+                  }
+                });
+              }
+            }
           }
         }
       } catch (e) {
-        console.error("Failed to fetch real balance from horizon:", e);
+        console.error("Failed to fetch blockchain data:", e);
       }
     };
     
-    fetchRealBalance();
-    
-    // Poll every 10 seconds to keep balance fresh
-    const interval = setInterval(fetchRealBalance, 10000);
+    fetchBlockchainData();
+    const interval = setInterval(fetchBlockchainData, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -49,19 +86,7 @@ export default function Dashboard() {
     setActionType(type);
   };
 
-  const handleConfirm = (assetId, type, amount) => {
-    const num = parseFloat(amount) || 0;
-    setPositions(prev => {
-      const current = prev[assetId] || { supplied: 0, borrowed: 0 };
-      return {
-        ...prev,
-        [assetId]: {
-          ...current,
-          supplied: type === 'supply' ? current.supplied + num : current.supplied,
-          borrowed: type === 'borrow' ? current.borrowed + num : current.borrowed,
-        }
-      };
-    });
+  const handleConfirm = () => {
     setSelectedAsset(null);
   };
 
@@ -165,11 +190,11 @@ export default function Dashboard() {
       <div className="bg-brand-emerald/10 backdrop-blur-xl border border-brand-emerald/30 rounded-2xl p-6 mb-12 shadow-[0_8px_30px_rgba(16,185,129,0.1)] flex items-center justify-between">
         <div>
           <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse"></span> Deployed Soroban Contract</h3>
-          <p className="text-muted font-mono text-sm tracking-wide">Contract ID: <span className="text-brand-emerald bg-brand-emerald/10 px-2 py-1 rounded opacity-90">{`CAM2KFCN7W6AEMO7...4554AQWJ`}</span></p>
+          <p className="text-muted font-mono text-sm tracking-wide">Contract ID: <span className="text-brand-emerald bg-brand-emerald/10 px-2 py-1 rounded opacity-90">{CONTRACT_ID}</span></p>
         </div>
         <div className="flex gap-4">
           <a
-            href="https://stellar.expert/explorer/testnet/contract/CAM2KFCN7W6AEMO7EAIO3CZ7CXEOPE3XNM3SNFXJFPS2KDDX4554AQWJ"
+            href={`https://stellar.expert/explorer/testnet/contract/${CONTRACT_ID}`}
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-brand-emerald hover:bg-brand-emerald-hover hover:scale-105 text-brand-slate rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)]"
