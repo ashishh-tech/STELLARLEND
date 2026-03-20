@@ -66,7 +66,8 @@ export default function AssetModal({ asset, type, onClose, onConfirm }) {
       const signedTxXdr = await signTransaction(finalTx.toXDR().toString('base64'), { networkPassphrase: NETWORK_PASSPHRASE });
       
       // Submit (use the string directly or fromXDR)
-      const sendResponse = await server.sendTransaction(StellarSdk.Transaction.fromXDR(signedTxXdr, NETWORK_PASSPHRASE));
+      const signedTransaction = new StellarSdk.Transaction(signedTxXdr, NETWORK_PASSPHRASE);
+      const sendResponse = await server.sendTransaction(signedTransaction);
       
       if (sendResponse.status === 'PENDING') {
          // Wait for status
