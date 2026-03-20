@@ -63,7 +63,7 @@ export default function AssetModal({ asset, type, onClose, onConfirm }) {
       const finalTx = StellarSdk.SorobanRpc.assembleTransaction(tx, simResponse).build();
       
       // Sign with Freighter (Base64 string is safer)
-      const signedTxXdr = await signTransaction(finalTx.toBase64(), { networkPassphrase: NETWORK_PASSPHRASE });
+      const signedTxXdr = await signTransaction(finalTx.toXDR().toString('base64'), { networkPassphrase: NETWORK_PASSPHRASE });
       
       // Submit (use the string directly or fromXDR)
       const sendResponse = await server.sendTransaction(StellarSdk.Transaction.fromXDR(signedTxXdr, NETWORK_PASSPHRASE));
