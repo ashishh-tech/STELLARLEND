@@ -56,14 +56,15 @@ export default function Dashboard() {
 
             const simResponse = await server.simulateTransaction(tx);
             if (StellarSdk.SorobanRpc.Api.isSimulationSuccess(simResponse)) {
-              const result = simResponse.result.retval;
-              // Parse AccountData struct { supplied, borrowed }
-              // This is a simplified parsing for the demo
-              const accountData = StellarSdk.scValToNative(result);
+              const resultXdr = simResponse.result.retval;
+              // Parse ScVal from XDR string
+              const resultScVal = StellarSdk.xdr.ScVal.fromXDR(resultXdr, 'base64');
+              const accountData = StellarSdk.scValToNative(resultScVal);
+              
               if (accountData) {
                 setPositions({
                   xlm: {
-                    supplied: Number(accountData.supplied) / 10**7, // Assuming 7 decimals
+                    supplied: Number(accountData.supplied) / 10**7,
                     borrowed: Number(accountData.borrowed) / 10**7,
                   }
                 });
