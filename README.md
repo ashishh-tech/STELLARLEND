@@ -106,7 +106,11 @@ Proof of deployment on the Stellar Testnet as seen on Stellar Expert.
 ### **Frontend**
 1. Enter the directory: `cd frontend`
 2. Install dependencies: `npm install`
-3. Run development server: `npm run dev`
+3. Set up environment variables:
+   - Copy `.env.example` to `.env.local`
+   - `cp .env.example .env.local`
+4. Run development server: `npm run dev`
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### **Smart Contract**
 1. Build the contract: `cargo build --target wasm32-unknown-unknown --release`
