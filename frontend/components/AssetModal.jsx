@@ -4,10 +4,7 @@ import { useState } from 'react';
 import { X, Layers, Activity, CheckCircle, AlertCircle } from 'lucide-react';
 import * as StellarSdk from 'stellar-sdk';
 import { isConnected, getAddress, signTransaction } from "@stellar/freighter-api";
-
-const CONTRACT_ID = 'CAQWXHETDAG33F33A54SWQQFS2UQTIGPLSVKKKLVUJLH42A7V6MXQL2B';
-const SERVER_URL = 'https://soroban-testnet.stellar.org';
-const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
+import { CONTRACT_ID, SERVER_URL, HORIZON_URL, NETWORK_PASSPHRASE } from '@/lib/stellar.config';
 
 export default function AssetModal({ asset, type, onClose, onConfirm }) {
   const [amount, setAmount] = useState('');
@@ -48,7 +45,7 @@ export default function AssetModal({ asset, type, onClose, onConfirm }) {
       const userScv = new StellarSdk.Address(userAddress).toScVal();
 
       // Fetch real account sequence from Horizon
-      const horizonRes = await fetch(`https://horizon-testnet.stellar.org/accounts/${userAddress}`);
+      const horizonRes = await fetch(`${HORIZON_URL}/accounts/${userAddress}`);
       if (!horizonRes.ok) throw new Error("Failed to fetch account info. Is your testnet account funded?");
       const accountData = await horizonRes.json();
 

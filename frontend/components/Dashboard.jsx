@@ -4,10 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ArrowUpCircle, ArrowDownCircle, Coins, TrendingUp, RefreshCw } from 'lucide-react';
 import AssetModal from './AssetModal';
 import * as StellarSdk from 'stellar-sdk';
-
-const CONTRACT_ID = 'CAQWXHETDAG33F33A54SWQQFS2UQTIGPLSVKKKLVUJLH42A7V6MXQL2B';
-const SERVER_URL = 'https://soroban-testnet.stellar.org';
-const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
+import { CONTRACT_ID, SERVER_URL, HORIZON_URL, NETWORK_PASSPHRASE } from '@/lib/stellar.config';
 
 // Base APY rates — representative for demo purposes
 const ASSET_META = {
@@ -54,7 +51,7 @@ export default function Dashboard() {
       setAddress(userAddress);
 
       // 1. Horizon — XLM balance
-      const horizonRes = await fetch(`https://horizon-testnet.stellar.org/accounts/${userAddress}`);
+      const horizonRes = await fetch(`${HORIZON_URL}/accounts/${userAddress}`);
       if (horizonRes.ok) {
         const data = await horizonRes.json();
         const xlm = data.balances?.find(b => b.asset_type === 'native')?.balance;
