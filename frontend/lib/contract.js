@@ -19,15 +19,26 @@ import {
 } from "@stellar/freighter-api";
 import {
   CONTRACT_ID as ENV_CONTRACT_ID,
-  SERVER_URL,
-  HORIZON_URL,
-  NETWORK_PASSPHRASE,
+  SERVER_URL as ENV_SERVER_URL,
+  HORIZON_URL as ENV_HORIZON_URL,
+  NETWORK_PASSPHRASE as ENV_NETWORK_PASSPHRASE,
 } from "./stellar.config";
 
-// ── Contract ID (fallback when env var is unset) ─────────────────────────────
+// ── Configuration Fallbacks ──────────────────────────────────────────────────
+// If environment variables are missing (e.g. not set in Netlify dashboard),
+// we fall back to the default Testnet configuration to prevent crashes.
+
 const CONTRACT_ID =
-  ENV_CONTRACT_ID ||
-  "CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB";
+  ENV_CONTRACT_ID || "CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB";
+
+const SERVER_URL =
+  ENV_SERVER_URL || "https://soroban-testnet.stellar.org";
+
+const HORIZON_URL =
+  ENV_HORIZON_URL || "https://horizon-testnet.stellar.org";
+
+const NETWORK_PASSPHRASE =
+  ENV_NETWORK_PASSPHRASE || "Test SDF Network ; September 2015";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
