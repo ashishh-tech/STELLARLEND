@@ -67,7 +67,7 @@ CDSYUIDUTWYYPT37MH274AGVGVUR6H3IVUQGWUWYX6A6B3U55I37TJKJ
 ## 🎬 Live Demo & Video
 
 *   **Live Application**: [STELLARLEND Live on Netlify](https://stellarlendmastery-demo.netlify.app)
-*   **Demo Video**: [YOUR_YOUTUBE_LINK_HERE](https://youtube.com)
+*   **Demo Video**: [YOUR_YOUTUBE_LINK_HERE](https://youtu.be/OrPAJ9Ojqe0)
 
 ---
 
