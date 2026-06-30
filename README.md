@@ -113,6 +113,23 @@ Proof of passing local unit tests for the Soroban smart contract operations.
 
 ---
 
+## 🔌 Frontend-Contract Integration
+
+The frontend communicates with the deployed Soroban smart contract through a dedicated integration layer in `frontend/lib/`. These files are the bridge between the Next.js UI and the on-chain contract:
+
+| File | Purpose |
+|------|---------|
+| `frontend/lib/contract.js` | **Core integration** — imports `stellar-sdk` (`@stellar/stellar-sdk`) and exposes `initialize()`, `deposit()`, `withdraw()`, `borrow()`, `repay()`, and `getAccountData()`. Each function builds a Soroban transaction, simulates it, signs via Freighter wallet, submits, and polls for on-chain confirmation. Function names and parameters match the Rust contract in `contracts/stellarlend/src/lib.rs` exactly. |
+| `frontend/lib/stellar.config.js` | Network configuration — reads `CONTRACT_ID`, Soroban RPC URL, Horizon URL, and network passphrase from environment variables (`.env.local`). |
+| `frontend/lib/freighter.js` | Wallet connection helper — wraps the `@stellar/freighter-api` to detect and connect to the Freighter browser wallet. |
+
+### How the UI uses these files
+
+* **`Dashboard.jsx`** calls `getAccountData(userAddress)` from `contract.js` to read the user's supplied/borrowed position from the contract (read-only simulation, no signing needed).
+* **`AssetModal.jsx`** calls `deposit()`, `withdraw()`, `borrow()`, or `repay()` from `contract.js` when the user confirms a Supply, Withdraw, Borrow, or Repay action. Each call triggers a Freighter signing popup and submits the signed transaction to the Stellar testnet.
+
+---
+
 ## 🛠️ How to Run Locally
 
 ### **Frontend**

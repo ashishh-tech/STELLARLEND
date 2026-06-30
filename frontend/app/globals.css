@@ -1,18 +1,26 @@
 @import "tailwindcss";
 
 @theme {
+  --color-navy-900: #0f172a;
+  --color-navy-950: #020617;
+  
   --color-brand-emerald: #10B981;
   --color-brand-emerald-hover: #059669;
+  
   --color-brand-slate: #0F172A;
   --color-brand-slate-light: #1E293B;
-  --color-brand-slate-border: #334155;
+  --color-brand-slate-border: rgba(255, 255, 255, 0.05);
+  --color-muted: #94A3B8;
+
+  --font-headline: var(--font-space-grotesk), sans-serif;
+  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-label: var(--font-public-sans), sans-serif;
 }
 
 :root {
-  --background: #0F172A;
-  --foreground: #F8FAFC;
-  --muted: #94A3B8;
-  --accent: #10B981;
+  --background: #020617;
+  --foreground: #cbd5e1; /* slate-300 */
 }
 
 html {
@@ -21,11 +29,12 @@ html {
 
 body {
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
+  /* Use the custom font by default */
+  font-family: var(--font-body);
 }
 
 /* Ambient Glowing Background Orbs */
@@ -37,7 +46,7 @@ body::before, body::after {
   border-radius: 50%;
   z-index: -1;
   filter: blur(140px);
-  opacity: 0.35;
+  opacity: 0.2;
   pointer-events: none;
   animation: float 20s infinite alternate;
 }
@@ -51,7 +60,7 @@ body::before {
 body::after {
   bottom: -200px;
   right: -200px;
-  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  background: radial-gradient(circle, #8B5CF6 0%, transparent 70%);
   animation-duration: 25s;
 }
 
@@ -60,17 +69,38 @@ body::after {
   100% { transform: translate(100px, 100px); }
 }
 
+/* Glassmorphism Utilities */
+.glass-card {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glow-green {
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+.glow-green-hover:hover {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+}
+
+.table-row-hover:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
 /* Custom scrollbar for premium feel */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: rgba(255, 255, 255, 0.2);
 }
