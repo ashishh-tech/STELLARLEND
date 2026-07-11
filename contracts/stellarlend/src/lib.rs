@@ -1,5 +1,5 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Address, Env, Symbol, Map, vec, Vec};
+use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Address, Env};
 
 mod test;
 
@@ -13,7 +13,7 @@ pub enum DataKey {
 }
 
 #[contracttype]
-#[derive(Clone, Debug, Default)]
+#[derive(Clone)]
 pub struct AccountData {
     pub supplied: i128,
     pub borrowed: i128,

@@ -8,7 +8,7 @@ fn test_deposit_and_borrow() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register_contract(None, StellarLend);
+    let contract_id = env.register(StellarLend, ());
     let client = StellarLendClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
@@ -40,7 +40,7 @@ fn test_deposit_and_borrow() {
 #[test]
 fn test_initialize() {
     let env = Env::default();
-    let contract_id = env.register_contract(None, StellarLend);
+    let contract_id = env.register(StellarLend, ());
     let client = StellarLendClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     client.initialize(&admin);
@@ -51,7 +51,7 @@ fn test_initialize() {
 fn test_borrow_fails_if_insufficient_collateral() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register_contract(None, StellarLend);
+    let contract_id = env.register(StellarLend, ());
     let client = StellarLendClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let user = Address::generate(&env);
