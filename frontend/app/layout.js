@@ -17,8 +17,13 @@ const publicSans = Public_Sans({
 });
 
 export const metadata = {
-  title: "StellarLend DeFi",
-  description: "Premium DeFi lending platform on Stellar blockchain.",
+  title: "StellarLend | Decentralized Peer-to-Peer Lending Protocol on Stellar",
+  description: "Supply assets, earn algorithmic yields, and borrow XLM instantly on Stellar Soroban smart contracts.",
+  icons: {
+    icon: "/logo-icon.svg",
+    shortcut: "/logo-icon.svg",
+    apple: "/logo-icon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -28,6 +33,7 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} ${spaceGrotesk.variable} ${publicSans.variable} h-full antialiased`}
     >
       <head>
+        <link rel="icon" type="image/svg+xml" href="/logo-icon.svg" />
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-full flex flex-col bg-navy-950 text-slate-300 font-body antialiased selection:bg-brand-emerald/30 selection:text-emerald-200">

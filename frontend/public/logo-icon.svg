@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="stellarGradIcon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="50%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+
+    <radialGradient id="glowIcon" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="neonGlowIcon" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow -->
+  <circle cx="50" cy="50" r="45" fill="url(#glowIcon)" />
+
+  <!-- Outer Orbital Ring -->
+  <path d="M 18 50 A 32 32 0 1 1 75 72" fill="none" stroke="url(#stellarGradIcon)" stroke-width="4" stroke-linecap="round" filter="url(#neonGlowIcon)" />
+  
+  <!-- Central Stellar 4-Point Star -->
+  <path d="M 50 16 Q 50 50 16 50 Q 50 50 50 84 Q 50 50 84 50 Q 50 50 50 16 Z" fill="url(#stellarGradIcon)" filter="url(#neonGlowIcon)" />
+  
+  <!-- Inner Core Sparkle -->
+  <circle cx="50" cy="50" r="5" fill="#FFFFFF" />
+</svg>

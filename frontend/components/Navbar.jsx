@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Logo from './Logo';
 import { connectWallet } from '@/lib/freighter';
 
 export default function Navbar({ address, onConnect, onDisconnect }) {
@@ -19,31 +20,39 @@ export default function Navbar({ address, onConnect, onDisconnect }) {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-6 py-3 md:py-4 bg-navy-950/40 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] transition-all">
-      <div className="container mx-auto flex justify-between items-center w-full">
-        {/* Brand */}
-        <div className="flex items-center gap-3 md:gap-6 cursor-pointer group">
-          <div className="flex items-center gap-2 md:gap-3">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-emerald flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)] group-hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] transition-all">
-              <span className="material-symbols-outlined text-navy-950 text-[20px] md:text-[24px]">monitoring</span>
-            </div>
-            <span className="text-lg md:text-xl font-bold tracking-tight text-white font-headline">StellarLend</span>
-            <span className="hidden sm:inline text-xs text-brand-emerald font-mono px-2 py-0.5 bg-brand-emerald/10 rounded-full border border-brand-emerald/20">Testnet</span>
+    <nav className="fixed top-0 left-0 w-full z-50 px-4 md:px-6 py-3.5 bg-navy-950/80 backdrop-blur-2xl border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all">
+      <div className="container mx-auto flex justify-between items-center w-full max-w-6xl">
+        
+        {/* Brand Logo & Network Status */}
+        <div className="flex items-center gap-4">
+          <Logo size="md" />
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-brand-emerald/10 border border-brand-emerald/25 rounded-full text-xs font-mono text-brand-emerald">
+            <span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse" />
+            <span>Soroban Testnet</span>
           </div>
         </div>
 
-        {/* Wallet */}
-        <div>
+        {/* Action Controls */}
+        <div className="flex items-center gap-3 md:gap-4">
+          {/* Quick Links (Desktop) */}
+          <div className="hidden md:flex items-center gap-6 mr-2 font-headline text-sm font-semibold">
+            <a href="#markets" className="text-slate-300 hover:text-brand-emerald transition-colors">Markets</a>
+            <a href="https://stellar.expert/explorer/testnet/contract/CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors flex items-center gap-1 text-xs font-mono">
+              <span>Contract</span>
+              <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+            </a>
+          </div>
+
           {address ? (
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 bg-navy-900/60 backdrop-blur-md px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg border border-brand-emerald/30 text-xs md:text-sm font-mono text-brand-emerald shadow-[0_0_10px_rgba(16,185,129,0.1)]">
-                <span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse" />
-                {truncateAddress(address)}
+            <div className="flex items-center gap-2 bg-navy-900/90 backdrop-blur-xl p-1.5 pl-3.5 rounded-xl border border-brand-emerald/40 text-xs md:text-sm font-mono text-brand-emerald shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-brand-emerald animate-ping" />
+                <span className="font-bold text-white tracking-wide">{truncateAddress(address)}</span>
               </div>
               <button
                 onClick={onDisconnect}
-                title="Disconnect wallet"
-                className="text-slate-400 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-red-400/10"
+                title="Disconnect Wallet"
+                className="ml-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all p-1.5 rounded-lg"
               >
                 <span className="material-symbols-outlined text-[18px]">logout</span>
               </button>
@@ -52,10 +61,10 @@ export default function Navbar({ address, onConnect, onDisconnect }) {
             <button
               onClick={handleConnect}
               disabled={loading}
-              className="flex items-center gap-2 bg-brand-emerald hover:bg-brand-emerald-hover text-navy-950 px-4 md:px-6 py-2 md:py-2.5 rounded-lg font-bold text-sm md:text-base transition-all disabled:opacity-50 glow-green glow-green-hover"
+              className="relative group overflow-hidden px-5 md:px-6 py-2.5 rounded-xl font-headline font-bold text-xs md:text-sm text-navy-950 bg-gradient-to-r from-brand-emerald via-cyan-400 to-brand-emerald bg-[length:200%_auto] hover:bg-[position:right_center] transition-all duration-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] flex items-center gap-2"
             >
               <span className="material-symbols-outlined text-[18px]">account_balance_wallet</span>
-              {loading ? 'Connecting...' : <><span className="hidden sm:inline">Connect Freighter</span><span className="sm:hidden">Connect</span></>}
+              {loading ? 'Connecting...' : <span>Connect Wallet</span>}
             </button>
           )}
         </div>

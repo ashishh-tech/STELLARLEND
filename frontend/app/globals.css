@@ -2,14 +2,14 @@
 
 @theme {
   --color-navy-900: #0f172a;
-  --color-navy-950: #020617;
+  --color-navy-950: #030712;
   
   --color-brand-emerald: #10B981;
   --color-brand-emerald-hover: #059669;
   
   --color-brand-slate: #0F172A;
   --color-brand-slate-light: #1E293B;
-  --color-brand-slate-border: rgba(255, 255, 255, 0.05);
+  --color-brand-slate-border: rgba(255, 255, 255, 0.08);
   --color-muted: #94A3B8;
 
   --font-headline: var(--font-space-grotesk), sans-serif;
@@ -19,12 +19,13 @@
 }
 
 :root {
-  --background: #020617;
-  --foreground: #cbd5e1; /* slate-300 */
+  --background: #030712;
+  --foreground: #cbd5e1;
 }
 
 html {
   background-color: var(--background);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -33,11 +34,10 @@ body {
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
-  /* Use the custom font by default */
   font-family: var(--font-body);
 }
 
-/* Ambient Glowing Background Orbs */
+/* Dynamic Ambient Glow Mesh Orbs */
 body::before, body::after {
   content: '';
   position: fixed;
@@ -46,50 +46,62 @@ body::before, body::after {
   border-radius: 50%;
   z-index: -1;
   filter: blur(140px);
-  opacity: 0.2;
+  opacity: 0.22;
   pointer-events: none;
-  animation: float 20s infinite alternate;
+  animation: floatOrb 22s infinite alternate ease-in-out;
 }
 
 body::before {
-  top: -200px;
+  top: -250px;
   left: -200px;
-  background: radial-gradient(circle, var(--color-brand-emerald) 0%, transparent 70%);
+  background: radial-gradient(circle, #10B981 0%, #06B6D4 40%, transparent 70%);
 }
 
 body::after {
-  bottom: -200px;
+  bottom: -250px;
   right: -200px;
-  background: radial-gradient(circle, #8B5CF6 0%, transparent 70%);
-  animation-duration: 25s;
+  background: radial-gradient(circle, #6366F1 0%, #8B5CF6 50%, transparent 70%);
+  animation-duration: 28s;
 }
 
-@keyframes float {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(100px, 100px); }
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 80px) scale(1.1); }
+  100% { transform: translate(-50px, 40px) scale(0.95); }
 }
 
-/* Glassmorphism Utilities */
+/* Glassmorphism Cards */
 .glass-card {
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(3, 7, 18, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card-hover:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.15);
+}
+
+/* Glow Effects */
 .glow-green {
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
 }
 
-.glow-green-hover:hover {
-  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
 }
 
 .table-row-hover:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
 }
 
-/* Custom scrollbar for premium feel */
+/* Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -98,9 +110,9 @@ body::after {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(16, 185, 129, 0.4);
 }
