@@ -64,10 +64,11 @@ CDSYUIDUTWYYPT37MH274AGVGVUR6H3IVUQGWUWYX6A6B3U55I37TJKJ
 
 ---
 
-## 🎬 Live Demo & Video
+## 🎬 Live Demo, Presentation & Video
 
 *   **Live Application**: [STELLARLEND Live on Netlify](https://stellarlendmastery-demo.netlify.app)
-*   **Demo Video**: [YOUR_YOUTUBE_LINK_HERE](https://youtu.be/OrPAJ9Ojqe0)
+*   **Pitch Deck / Presentation**: [StellarLend Pitch Deck (PPTX)](./StellarLend_Pitch_Deck.pptx)
+*   **Demo Video**: [StellarLend Demo Video on YouTube](https://youtu.be/OrPAJ9Ojqe0)
 
 ---
 
