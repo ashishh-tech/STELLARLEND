@@ -2,7 +2,7 @@ const StellarSdk = require('stellar-sdk');
 
 async function run() {
   const SERVER_URL = 'https://soroban-testnet.stellar.org';
-  const CONTRACT_ID = 'CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB';
+  const CONTRACT_ID = 'CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS';
   const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
   
   // Generate a VALID Stellar keypair

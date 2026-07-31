@@ -29,7 +29,7 @@ import {
 // we fall back to the default Testnet configuration to prevent crashes.
 
 const CONTRACT_ID =
-  ENV_CONTRACT_ID || "CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB";
+  ENV_CONTRACT_ID || "CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS";
 
 const SERVER_URL =
   ENV_SERVER_URL || "https://soroban-testnet.stellar.org";

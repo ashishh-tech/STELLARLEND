@@ -37,7 +37,7 @@ export default function Navbar({ address, onConnect, onDisconnect }) {
           {/* Quick Links (Desktop) */}
           <div className="hidden md:flex items-center gap-6 mr-2 font-headline text-sm font-semibold">
             <a href="#markets" className="text-slate-300 hover:text-brand-emerald transition-colors">Markets</a>
-            <a href="https://stellar.expert/explorer/testnet/contract/CAEHJM2NVDC7IPHICCPAVSNFF3MN4SK4F5K5O6V5T3MSDQBULBLNLUCB" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors flex items-center gap-1 text-xs font-mono">
+            <a href="https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors flex items-center gap-1 text-xs font-mono">
               <span>Contract</span>
               <span className="material-symbols-outlined text-[14px]">open_in_new</span>
             </a>

@@ -44,7 +44,7 @@ To build a transparent, trustless, and decentralized lending platform on the Ste
 ## 📊 Deployed Contract
 
 - **Network:** Stellar Testnet
-- **Contract ID:** `CDSYUIDUTWYYPT37MH274AGVGVUR6H3IVUQGWUWYX6A6B3U55I37TJKJ`
+- **Contract ID:** `CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS`
 - **Status:** ✅ Active & Functional
 
 ## 🚀 Getting Started
