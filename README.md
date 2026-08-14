@@ -22,12 +22,15 @@ All operations are executed on-chain using Soroban smart contracts, ensuring tru
 
 ## ✨ Features
 
-* 🔗 Fully decentralized lending system
-* 👛 Wallet-based authentication (no login required)
-* 💸 Loan creation and acceptance
-* 🔄 Loan repayment tracking
-* 📊 Transparent loan data stored on-chain
-* ⚡ Fast and low-cost transactions using Stellar
+* 🔗 Fully decentralized lending system on Stellar Soroban
+* 👛 Wallet-based authentication with Freighter (no login required)
+* 🚀 Interactive User Onboarding Guide & Activation Checklist
+* 🎁 Growth & Referral Engine with tiered APY incentives
+* 💬 Community Feedback & Continuous Product Iteration widget
+* 💸 Collateral supply & instant loan borrowing
+* 🔄 Real-time loan repayment and health factor tracking
+* 📊 Transparent loan data stored directly on-chain
+* ⚡ Fast and low-cost sub-second transactions using Stellar
 
 ---
 

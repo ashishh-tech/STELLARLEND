@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import AssetModal from './AssetModal';
+import OnboardingChecklist from './OnboardingChecklist';
 import { getAccountData } from '@/lib/contract';
 import { CONTRACT_ID, HORIZON_URL } from '@/lib/stellar.config';
 
@@ -9,7 +10,7 @@ const ASSET_META = {
   xlm: { symbol: 'XLM', name: 'Stellar Lumens', supplyApy: 4.2, borrowApy: 6.8 },
 };
 
-export default function Dashboard() {
+export default function Dashboard({ onOpenOnboarding, onOpenReferral, onOpenFeedback }) {
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [actionType, setActionType] = useState(null);
 
@@ -113,6 +114,16 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-24 md:py-28 max-w-6xl relative z-10">
+
+      {/* Level 5 Onboarding & Activation Checklist */}
+      <OnboardingChecklist
+        address={address}
+        xlmBalance={xlmBalance}
+        position={position}
+        onOpenOnboarding={onOpenOnboarding}
+        onOpenReferral={onOpenReferral}
+        onOpenFeedback={onOpenFeedback}
+      />
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

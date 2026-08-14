@@ -3,7 +3,7 @@
 import { connectWallet } from '@/lib/freighter';
 import Logo from './Logo';
 
-export default function Landing({ onConnect }) {
+export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, onOpenFeedback }) {
   const handleConnect = async () => {
     const address = await connectWallet();
     if (address && onConnect) {
@@ -33,9 +33,34 @@ export default function Landing({ onConnect }) {
           </span>
         </h1>
         
-        <p className="text-base sm:text-xl md:text-2xl text-slate-300 mb-10 max-w-3xl font-body leading-relaxed opacity-90">
+        <p className="text-base sm:text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl font-body leading-relaxed opacity-90">
           Supply crypto assets, earn algorithmic yield, and borrow XLM instantly with zero intermediaries on the Stellar blockchain network.
         </p>
+
+        {/* Level 5 Quick Access Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-10">
+          <button
+            onClick={onOpenOnboarding}
+            className="px-3.5 py-1.5 rounded-full bg-brand-emerald/15 hover:bg-brand-emerald/25 border border-brand-emerald/30 text-brand-emerald text-xs font-semibold font-headline transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+          >
+            <span className="material-symbols-outlined text-sm">menu_book</span>
+            <span>Beginner&apos;s Quickstart Guide</span>
+          </button>
+          <button
+            onClick={onOpenReferral}
+            className="px-3.5 py-1.5 rounded-full bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/30 text-amber-300 text-xs font-semibold font-headline transition-all flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-sm">card_giftcard</span>
+            <span>Referral & Rewards Hub</span>
+          </button>
+          <button
+            onClick={onOpenFeedback}
+            className="px-3.5 py-1.5 rounded-full bg-purple-500/15 hover:bg-purple-500/25 border border-purple-400/30 text-purple-300 text-xs font-semibold font-headline transition-all flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-sm">rate_review</span>
+            <span>Product Feedback</span>
+          </button>
+        </div>
 
         {/* Call to Action Button */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 w-full max-w-md">
