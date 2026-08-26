@@ -12,7 +12,13 @@ import TestnetFaucetModal from './TestnetFaucetModal';
 import { getAccountData, getHealthFactor } from '@/lib/contract';
 import { HORIZON_URL } from '@/lib/stellar.config';
 
-export default function Dashboard({ onOpenOnboarding, onOpenReferral, onOpenFeedback }) {
+export default function Dashboard({
+  userAddress: propAddress,
+  onConnectWallet,
+  onOpenOnboarding,
+  onOpenReferral,
+  onOpenFeedback,
+}) {
   // Navigation Tabs: 'portfolio', 'markets', 'liquidations', 'simulator', 'analytics'
   const [activeTab, setActiveTab] = useState('portfolio');
 
@@ -22,12 +28,16 @@ export default function Dashboard({ onOpenOnboarding, onOpenReferral, onOpenFeed
   const [isFaucetOpen, setIsFaucetOpen] = useState(false);
 
   // Blockchain Data State
-  const [address, setAddress] = useState(null);
+  const [address, setAddress] = useState(propAddress || null);
   const [xlmBalance, setXlmBalance] = useState(null);
   const [xlmPrice, setXlmPrice] = useState(0.115);
   const [position, setPosition] = useState({ supplied: 0, borrowed: 0 });
   const [healthFactor, setHealthFactor] = useState(10.0);
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (propAddress) setAddress(propAddress);
+  }, [propAddress]);
 
   // Fetch XLM live price
   const fetchXlmPrice = useCallback(async () => {

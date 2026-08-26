@@ -16,6 +16,7 @@ const FeedbackWidget = dynamic(() => import('@/components/FeedbackWidget'), { ss
 export default function Home() {
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('app'); // 'app' (Dashboard Terminal) or 'landing' (Hero Showcase)
 
   // Modal controls
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
@@ -47,6 +48,7 @@ export default function Home() {
     const userAddress = await connectWallet();
     if (userAddress) {
       setAddress(userAddress);
+      setViewMode('app');
     }
   };
 
@@ -62,22 +64,32 @@ export default function Home() {
     <div className="min-h-screen relative">
       <Navbar 
         address={address} 
-        onConnect={(addr) => setAddress(addr)} 
+        viewMode={viewMode}
+        onToggleView={(mode) => setViewMode(mode)}
+        onConnect={(addr) => {
+          setAddress(addr);
+          setViewMode('app');
+        }} 
         onDisconnect={() => setAddress(null)}
         onOpenOnboarding={() => setIsOnboardingOpen(true)}
         onOpenReferral={() => setIsReferralOpen(true)}
         onOpenFeedback={() => setIsFeedbackOpen(true)}
       />
 
-      {address ? (
+      {viewMode === 'app' ? (
         <Dashboard 
+          userAddress={address}
+          onConnectWallet={handleWalletConnect}
           onOpenOnboarding={() => setIsOnboardingOpen(true)}
           onOpenReferral={() => setIsReferralOpen(true)}
           onOpenFeedback={() => setIsFeedbackOpen(true)}
         />
       ) : (
         <Landing 
-          onConnect={(addr) => setAddress(addr)}
+          onConnect={(addr) => {
+            setAddress(addr);
+            setViewMode('app');
+          }}
           onOpenOnboarding={() => setIsOnboardingOpen(true)}
           onOpenReferral={() => setIsReferralOpen(true)}
           onOpenFeedback={() => setIsFeedbackOpen(true)}
