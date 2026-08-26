@@ -135,10 +135,11 @@ CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS
 
 ## 📸 Project Showcase
 
-### **1. Premium Lending Dashboard**
-The frontend features a high-end glassmorphism design with animated background orbs, real-time Stellar balance fetching, and a dynamic portfolio health tracker.
+### **1. Next-Gen DeFi Lending Terminal (Level 5 — Blue Belt)**
+The upgraded frontend features a state-of-the-art terminal with multi-tab navigation (*My Portfolio*, *Lending Markets*, *Liquidation Hub*, *Yield Simulator*, *Analytics*), real-time SVG Health Factor arc gauges, and instant testnet funding.
 
-<img width="1918" height="893" alt="image" src="https://github.com/user-attachments/assets/334eebb9-77c0-4f08-ac03-2559ba6ad2be" />
+![StellarLend Level 5 DeFi Terminal](screenshots/level5_dashboard.png)
+
 
 
 ### **2. On-Chain Contract Verification**
