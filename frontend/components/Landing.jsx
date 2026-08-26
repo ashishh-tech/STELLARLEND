@@ -2,6 +2,7 @@
 
 import { connectWallet } from '@/lib/freighter';
 import Logo from './Logo';
+import { PROTOCOL_MARKETS } from './MarketsTable';
 
 export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, onOpenFeedback }) {
   const handleConnect = async () => {
@@ -22,7 +23,7 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
         {/* Brand Emblem Hero Badge */}
         <div className="inline-flex items-center gap-2 mb-6 md:mb-8 px-4 py-2 rounded-full border border-brand-emerald/40 bg-brand-emerald/10 text-brand-emerald font-mono text-xs md:text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-pulse">
           <span className="w-2 h-2 rounded-full bg-brand-emerald" />
-          <span>Powered by Stellar Soroban Smart Contracts</span>
+          <span>Soroban v25 Scalable Smart Contracts</span>
         </div>
         
         {/* Main Headline */}
@@ -34,7 +35,7 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
         </h1>
         
         <p className="text-base sm:text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl font-body leading-relaxed opacity-90">
-          Supply crypto assets, earn algorithmic yield, and borrow XLM instantly with zero intermediaries on the Stellar blockchain network.
+          Supply crypto assets, earn algorithmic yield, and borrow instantly with persistent on-chain scaling and automated liquidations on Stellar.
         </p>
 
         {/* Level 5 Quick Access Badges */}
@@ -62,7 +63,7 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
           </button>
         </div>
 
-        {/* Call to Action Button */}
+        {/* Call to Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 w-full max-w-md">
           <button
             onClick={handleConnect}
@@ -85,22 +86,82 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
         </div>
 
         {/* Live Protocol Stats Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-5xl mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-5xl mb-16">
           <div className="glass-card rounded-2xl p-4 md:p-6 text-center border border-white/5">
             <div className="text-2xl md:text-3xl font-extrabold text-white font-mono">$42.8M+</div>
             <div className="text-xs text-slate-400 font-mono uppercase tracking-wider mt-1">Total Value Locked</div>
           </div>
           <div className="glass-card rounded-2xl p-4 md:p-6 text-center border border-white/5">
-            <div className="text-2xl md:text-3xl font-extrabold text-brand-emerald font-mono">4.20%</div>
-            <div className="text-xs text-slate-400 font-mono uppercase tracking-wider mt-1">Supply APY</div>
+            <div className="text-2xl md:text-3xl font-extrabold text-brand-emerald font-mono">7.80%</div>
+            <div className="text-xs text-slate-400 font-mono uppercase tracking-wider mt-1">Max Supply APY</div>
           </div>
           <div className="glass-card rounded-2xl p-4 md:p-6 text-center border border-white/5">
-            <div className="text-2xl md:text-3xl font-extrabold text-cyan-400 font-mono">75.0%</div>
+            <div className="text-2xl md:text-3xl font-extrabold text-cyan-400 font-mono">85.0%</div>
             <div className="text-xs text-slate-400 font-mono uppercase tracking-wider mt-1">Max LTV Limit</div>
           </div>
           <div className="glass-card rounded-2xl p-4 md:p-6 text-center border border-white/5">
-            <div className="text-2xl md:text-3xl font-extrabold text-indigo-400 font-mono">&lt; 3 sec</div>
-            <div className="text-xs text-slate-400 font-mono uppercase tracking-wider mt-1">Settlement Speed</div>
+            <div className="text-2xl md:text-3xl font-extrabold text-purple-400 font-mono">Persistent</div>
+            <div className="text-xs text-slate-400 font-mono uppercase tracking-wider mt-1">TTL Scaling Architecture</div>
+          </div>
+        </div>
+
+        {/* Live Multi-Asset Reserves Preview */}
+        <div className="w-full max-w-5xl mb-24 text-left">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white font-headline">Active Reserve Markets</h2>
+              <p className="text-xs md:text-sm text-slate-400 font-mono mt-1">Real-time dynamic yield & borrowing parameters</p>
+            </div>
+            <button
+              onClick={handleConnect}
+              className="text-xs font-mono text-brand-emerald hover:underline flex items-center gap-1"
+            >
+              <span>Explore All</span>
+              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {PROTOCOL_MARKETS.map((m) => (
+              <div key={m.id} className="glass-card glass-card-hover rounded-2xl p-5 border border-white/10 flex flex-col justify-between space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className={`w-9 h-9 rounded-xl border flex items-center justify-center font-bold font-mono text-xs ${m.iconBg}`}>
+                      {m.symbol.slice(0, 3)}
+                    </div>
+                    <div>
+                      <div className="font-bold text-white font-headline">{m.symbol}</div>
+                      <div className="text-[11px] text-slate-400 font-mono">${m.price.toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
+                    LTV {m.ltv}%
+                  </span>
+                </div>
+
+                <div className="space-y-1.5 font-mono text-xs pt-2 border-t border-white/5">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Supply APY:</span>
+                    <span className="text-brand-emerald font-bold">{m.supplyApy.toFixed(2)}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Borrow APY:</span>
+                    <span className="text-cyan-400 font-bold">{m.borrowApy.toFixed(2)}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Pool Depth:</span>
+                    <span className="text-white font-semibold">{m.totalSupplied}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleConnect}
+                  className="w-full py-2 rounded-xl bg-white/5 hover:bg-brand-emerald hover:text-navy-950 font-bold font-headline text-xs text-slate-200 transition-all text-center"
+                >
+                  Deposit {m.symbol}
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -128,7 +189,7 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
               </div>
               <h3 className="text-xl font-bold text-white mb-3 font-headline">Deposit Collateral</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Supply XLM into the decentralized liquidity pool to start earning passive yield immediately.
+                Supply multi-asset collateral into persistent Soroban liquidity reserves to start compounding yield immediately.
               </p>
             </div>
 
@@ -138,7 +199,7 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
               </div>
               <h3 className="text-xl font-bold text-white mb-3 font-headline">Borrow Instantly</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Borrow against your supplied collateral up to 75% LTV with transparent on-chain health monitoring.
+                Borrow against your supplied collateral up to 85% LTV with transparent on-chain health factor monitoring and liquidation protection.
               </p>
             </div>
           </div>
@@ -150,9 +211,9 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
             <div className="w-14 h-14 rounded-2xl bg-brand-emerald/10 flex items-center justify-center mb-6 border border-brand-emerald/30 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
               <span className="material-symbols-outlined text-[30px] text-brand-emerald">bolt</span>
             </div>
-            <h3 className="text-xl font-bold text-white mb-3 font-headline">Soroban Engine</h3>
+            <h3 className="text-xl font-bold text-white mb-3 font-headline">Persistent Storage Scaling</h3>
             <p className="text-slate-400 font-body leading-relaxed text-sm">
-              Engineered with Rust-based Soroban smart contracts for sub-second execution speeds and micro transaction fees.
+              Engineered with Soroban persistent storage separation and automatic TTL extension to support millions of concurrent borrowers without ledger limits.
             </p>
           </div>
 
@@ -160,9 +221,9 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
             <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
               <span className="material-symbols-outlined text-[30px] text-blue-400">shield_lock</span>
             </div>
-            <h3 className="text-xl font-bold text-white mb-3 font-headline">Non-Custodial</h3>
+            <h3 className="text-xl font-bold text-white mb-3 font-headline">Automated Liquidation Engine</h3>
             <p className="text-slate-400 font-body leading-relaxed text-sm">
-              You maintain 100% control of your private keys. All loans and collateral remain locked strictly inside smart contract storage.
+              Protects protocol solvency by allowing community keepers to liquidate unhealthy positions (HF &lt; 1.0) and earn an instant 5% bounty.
             </p>
           </div>
 
@@ -170,9 +231,9 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
             <div className="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
               <span className="material-symbols-outlined text-[30px] text-purple-400">trending_up</span>
             </div>
-            <h3 className="text-xl font-bold text-white mb-3 font-headline">Optimized Yields</h3>
+            <h3 className="text-xl font-bold text-white mb-3 font-headline">Kink Interest Rate Model</h3>
             <p className="text-slate-400 font-body leading-relaxed text-sm">
-              Algorithmic interest rates dynamically adjust based on liquidity demand to ensure maximum capital efficiency for lenders.
+              Algorithmic dynamic kink curves dynamically optimize capital efficiency for lenders while maintaining deep borrowing liquidity.
             </p>
           </div>
         </div>
@@ -181,7 +242,7 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
       {/* Footer */}
       <footer className="border-t border-white/10 py-8 px-6 text-center text-slate-400 text-xs font-mono relative z-10 flex flex-col sm:flex-row justify-between items-center container mx-auto max-w-6xl gap-4">
         <Logo size="sm" showSubtitle={false} />
-        <div>© 2026 StellarLend Protocol. Built on Stellar Soroban.</div>
+        <div>© 2026 StellarLend Protocol. Built on Stellar Soroban v25.</div>
         <div className="flex gap-4">
           <a href="https://stellar.org" target="_blank" rel="noreferrer" className="hover:text-brand-emerald transition-colors">Stellar Network</a>
           <a href="https://freighter.app" target="_blank" rel="noreferrer" className="hover:text-brand-emerald transition-colors">Freighter Wallet</a>

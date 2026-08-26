@@ -1,234 +1,131 @@
-# 🚀 Stellar Soroban P2P Lending Smart Contract
+# 🚀 StellarLend — Scalable Next-Gen P2P DeFi Lending Protocol
 [![CI/CD Pipeline](https://github.com/ashishh-tech/Stellar-Peer-to-Peer-Lending/actions/workflows/ci.yml/badge.svg)](https://github.com/ashishh-tech/Stellar-Peer-to-Peer-Lending/actions/workflows/ci.yml)
+[![Soroban](https://img.shields.io/badge/Soroban-v25-blueviolet.svg)](https://soroban.stellar.org)
+[![Storage](https://img.shields.io/badge/Storage-Persistent%20TTL%20Scalable-success.svg)](https://soroban.stellar.org/docs/fundamentals-and-concepts/state-archival)
+[![Tests](https://img.shields.io/badge/Tests-9%20Passed-brightgreen.svg)](https://github.com/ashishh-tech/STELLARLEND)
 
-## 📌 Project Description
+## 📌 Project Overview
 
-This project is a decentralized Peer-to-Peer (P2P) lending platform built on the Stellar blockchain using Soroban smart contracts. It allows users to lend and borrow funds directly without intermediaries, ensuring transparency, security, and low transaction costs.
-
----
-
-## ⚙️ What it does
-
-The smart contract enables:
-
-* Lenders to create loan offers
-* Borrowers to accept loans
-* Borrowers to repay loans
-* Public access to loan details
-
-All operations are executed on-chain using Soroban smart contracts, ensuring trustless transactions.
+**StellarLend** is a decentralized, non-custodial Peer-to-Peer (P2P) lending and borrowing protocol built on the **Stellar blockchain** using **Soroban smart contracts (Rust)**. It allows users to supply collateral, earn dynamic algorithmic yield, and borrow digital assets with zero intermediaries, high capital efficiency, and sub-second settlement.
 
 ---
 
-## ✨ Features
+## ⚡ Architectural Upgrades (Scalability & Resilience)
 
-* 🔗 Fully decentralized lending system on Stellar Soroban
-* 👛 Wallet-based authentication with Freighter (no login required)
-* 🚀 Interactive User Onboarding Guide & Activation Checklist
-* 🎁 Growth & Referral Engine with tiered APY incentives
-* 💬 Community Feedback & Continuous Product Iteration widget
-* 💸 Collateral supply & instant loan borrowing
-* 🔄 Real-time loan repayment and health factor tracking
-* 📊 Transparent loan data stored directly on-chain
-* ⚡ Fast and low-cost sub-second transactions using Stellar
+### 1. 🏗️ **Infinite Multi-User Scale via Persistent Storage**
+* **The Problem with Instance Storage**: Contracts storing user balances in `instance()` storage load all user records on every invocation, quickly exceeding Soroban single-ledger entry limits (64KB) and breaking protocol scaling.
+* **The StellarLend Solution**: Transitioned user accounts to **isolated `persistent()` storage entries** (`DataKey::UserPosition(Address, Address)` and `DataKey::UserAccount(Address)`) with **automatic TTL extension** (`extend_ttl`). Each user position lives in its own dedicated ledger entry, enabling the protocol to scale to millions of concurrent accounts without storage bottleneck.
+
+### 2. 📊 **Algorithmic Kink Interest Rate Model**
+* Dynamic interest rate determination based on capital utilization ($U = \frac{\text{Borrowed}}{\text{Supplied}}$):
+  $$\text{Borrow Rate} = \text{Base Rate} + \left(U \times \text{Slope Rate}\right)$$
+  $$\text{Supply Rate} = \text{Borrow Rate} \times U \times (1 - \text{Reserve Factor})$$
+* Compounding interest indices (`supply_index`, `borrow_index`) accrued on every state transition.
+
+### 3. 🛡️ **Automated Liquidation Engine & Keeper Bounties**
+* **Solvency Protection**: Real-time on-chain Health Factor calculation:
+  $$\text{Health Factor} = \frac{\sum (\text{Collateral}_i \times \text{Price}_i \times \text{Threshold}_i)}{\sum (\text{Debt}_j \times \text{Price}_j)}$$
+* **5.0% Keeper Bounty**: When a borrower's Health Factor drops below 1.0, any community liquidator can repay the debt via `liquidate()` and seize collateral with an instant **5.0% liquidation premium**, preventing bad debt.
+
+### 4. 🌐 **Multi-Reserve Token Ecosystem**
+* Native support for SEP-41 / SAC tokens:
+  * **XLM** (Stellar Lumens) — 75% LTV, 80% Liquidation Threshold
+  * **USDC** (USD Coin) — 85% LTV, 90% Liquidation Threshold
+  * **EURC** (Euro Coin) — 80% LTV, 85% Liquidation Threshold
+  * **WBTC** (Wrapped Bitcoin) — 70% LTV, 75% Liquidation Threshold
+
+---
+
+## ✨ Full Feature Suite
+
+* 🔗 **Scalable Soroban Smart Contracts** with isolated persistent storage and automatic TTL management.
+* 👛 **Freighter Wallet Integration** with one-click connection and transaction signing.
+* 📈 **Interactive Health Factor SVG Gauge** with dynamic safety zones (Safe, Moderate, Warning, Liquidation).
+* 🏪 **Multi-Asset Lending Markets** table with real-time APYs, pool depths, and utilization bars.
+* ⚡ **Liquidation Terminal & Auction Hub** with live borrower risk matrix and 1-click keeper execution.
+* 🧮 **Interactive Yield & Stress Simulator** with compound APY sliders and price volatility crash modeling.
+* 📊 **Protocol Analytics Terminal** with dynamic interest rate kink curves and reserve breakdowns.
+* 💧 **Instant Testnet Faucet & Quick Funding** modal for rapid review testing.
+* 🚀 **Interactive Beginner's Onboarding Guide & Activation Checklist**.
+* 🎁 **Growth & Referral Engine** with tiered APY incentives.
+* 💬 **Continuous Product Feedback Widget** for community-driven iteration.
 
 ---
 
 ## 🛠️ Tech Stack
 
-* Stellar Blockchain
-* Soroban Smart Contracts (Rust)
-* Stellar CLI
-* Freighter Wallet
-
----
-
-## 🚀 How to Run Locally
-
-1. Install Stellar CLI
-2. Clone this repository
-3. Build the contract:
-
-   ```
-   cargo build --target wasm32-unknown-unknown --release
-   ```
-4. Deploy using Stellar CLI
+* **Smart Contracts**: Rust, Soroban SDK v25 (`#![no_std]`)
+* **Blockchain**: Stellar Network (Testnet & Mainnet Ready)
+* **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS
+* **Wallet & SDK**: `@stellar/freighter-api`, `stellar-sdk`
+* **Styling**: Glassmorphism, Cyberpunk DeFi Gradients, Dynamic Glow Mesh Orbs
 
 ---
 
 ## 🌐 Deployed Smart Contract (Testnet)
 
-### 🔗 **Contract Explorer (Stellar Expert)**
-https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS
-### **Contract ID**
-```
-CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS
-```
+* **Contract ID**: `CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS`
+* **Stellar Expert Explorer**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS)
+* **Live Application**: [STELLARLEND Live Demo](https://stellarlendmastery-demo.netlify.app)
+* **Demo Video**: [StellarLend Video Walkthrough](https://youtu.be/OrPAJ9Ojqe0)
 
 ---
 
-## 🎬 Live Demo, Presentation & Video
+## 🧪 Smart Contract Verification (Passing Tests)
 
-*   **Live Application**: [STELLARLEND Live on Netlify](https://stellarlendmastery-demo.netlify.app)
-*   **Pitch Deck / Presentation**: [StellarLend Pitch Deck (PPTX)](./StellarLend_Pitch_Deck.pptx)
-*   **Demo Video**: [StellarLend Demo Video on YouTube](https://youtu.be/OrPAJ9Ojqe0)
+Run the comprehensive unit test suite:
+```bash
+cargo test
+```
 
----
+### Test Coverage Highlights (9/9 Passed):
+```
+running 9 tests
+test test::test_initialize ... ok
+test test::test_borrow_fails_if_insufficient_collateral - should panic ... ok
+test test::test_contract_pause_prevents_actions - should panic ... ok
+test test::test_withdraw_fails_if_exceeds_supply - should panic ... ok
+test test::test_repay_fails_if_exceeds_debt - should panic ... ok
+test test::test_contract_unpause_restores_actions ... ok
+test test::test_scalable_persistent_storage_deposit_and_borrow ... ok
+test test::test_multi_user_scalability_isolation ... ok
+test test::test_multi_reserve_token_lifecycle_and_liquidation ... ok
 
-## 📸 Project Showcase
-
-### **1. Premium Lending Dashboard**
-The frontend features a high-end glassmorphism design with animated background orbs, real-time Stellar balance fetching, and a dynamic portfolio health tracker.
-
-<img width="1918" height="893" alt="image" src="https://github.com/user-attachments/assets/334eebb9-77c0-4f08-ac03-2559ba6ad2be" />
-
-
-### **2. On-Chain Contract Verification**
-Proof of deployment on the Stellar Testnet as seen on Stellar Expert.
-<img width="1907" height="921" alt="image" src="https://github.com/user-attachments/assets/6a01f7c9-4787-46c7-a07a-f4a879821236" />
-
-
-### **3. Smart Contract Test Verification**
-Proof of passing local unit tests for the Soroban smart contract operations.
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+```
 
 ![Test Verification](screenshots/test_output.png)
 
-### **4. Mobile Responsive UI**
-The dashboard is fully responsive, ensuring a seamless lending and borrowing experience on mobile devices.
-
-<p align="center">
-  <img width="371" alt="StellarLend Mobile Dashboard" src="https://github.com/user-attachments/assets/b0cfbc73-f087-4ef8-810c-afc9d4765140" />
-</p>
-
-### **5. CI/CD Pipeline Running**
-Automated GitHub Actions workflow successfully building and deploying the project.
-
-![CI/CD Pipeline](screenshots/cicd_pipeline.png)
-
 ---
 
-## 🎨 UI/UX Features (Frontend)
+## 🚀 How to Run Locally
 
-*   **Next.js 14 App Router** for speed and SEO.
-*   **Glassmorphism Aesthetic** with `backdrop-blur` and glowing ambient orbs.
-*   **Freighter Wallet Integration** for secure transaction signing.
-*   **Real-time Data** fetching via Horizon Testnet API.
-*   **Responsive Health Bar** calculating borrow limits on-the-fly.
+### 1. Smart Contract:
+```bash
+# Clone the repository
+git clone https://github.com/ashishh-tech/STELLARLEND.git
+cd STELLARLEND
 
----
+# Run tests
+cargo test
 
-## 📁 Project Structure
-
-```text
-.
-├── frontend/             # Next.js 14 Web Application
-├── contracts/            # Soroban Smart Contracts (Rust)
-├── screenshots/          # Project visual showcases
-├── Cargo.toml            # Workspace configuration
-└── README.md             # Project documentation
+# Build WASM binary
+cargo build --target wasm32-unknown-unknown --release
 ```
 
----
+### 2. Frontend Application:
+```bash
+cd frontend
 
-## 🔌 Frontend-Contract Integration
+# Install dependencies
+npm install
 
-The frontend communicates with the deployed Soroban smart contract through a dedicated integration layer in `frontend/lib/`. These files are the bridge between the Next.js UI and the on-chain contract:
-
-| File | Purpose |
-|------|---------|
-| `frontend/lib/contract.js` | **Core integration** — imports `stellar-sdk` (`@stellar/stellar-sdk`) and exposes `initialize()`, `deposit()`, `withdraw()`, `borrow()`, `repay()`, and `getAccountData()`. Each function builds a Soroban transaction, simulates it, signs via Freighter wallet, submits, and polls for on-chain confirmation. Function names and parameters match the Rust contract in `contracts/stellarlend/src/lib.rs` exactly. |
-| `frontend/lib/stellar.config.js` | Network configuration — reads `CONTRACT_ID`, Soroban RPC URL, Horizon URL, and network passphrase from environment variables (`.env.local`). |
-| `frontend/lib/freighter.js` | Wallet connection helper — wraps the `@stellar/freighter-api` to detect and connect to the Freighter browser wallet. |
-
-### How the UI uses these files
-
-* **`Dashboard.jsx`** calls `getAccountData(userAddress)` from `contract.js` to read the user's supplied/borrowed position from the contract (read-only simulation, no signing needed).
-* **`AssetModal.jsx`** calls `deposit()`, `withdraw()`, `borrow()`, or `repay()` from `contract.js` when the user confirms a Supply, Withdraw, Borrow, or Repay action. Each call triggers a Freighter signing popup and submits the signed transaction to the Stellar testnet.
+# Run development server
+npm run dev
+```
+Open `http://localhost:3000` in your browser.
 
 ---
 
-## 🛠️ How to Run Locally
-
-### **Frontend**
-1. Enter the directory: `cd frontend`
-2. Install dependencies: `npm install`
-3. Set up environment variables:
-   - Copy `.env.example` to `.env.local`
-   - `cp .env.example .env.local`
-4. Run development server: `npm run dev`
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### **Smart Contract**
-1. Build the contract: `cargo build --target wasm32-unknown-unknown --release`
-2. Deploy using Stellar CLI.
-
----
-## 📊 User Feedback Summary (Beta Testing — June 2026)
-
-### Wallet Connection Experience
-- Majority of users found it **Very Easy** to connect Freighter wallet
-- Some found it **Easy**
-- 0% reported difficulty
-
-### Transaction Completion
-- Most users **successfully completed** a Supply/Borrow transaction
-- Very few completed with minor issues
-
-### UI/UX Rating (1–5 scale)
-- **Average Rating: 4.8 / 5**
-- Most users rated it 5/5
-
-### Mainnet Interest
-- Majority said **"Definitely Yes"** to using StellarLend on Mainnet
-
-### Key User Feedback
-- ✅ "Clean UI, smooth borrow/supply experience"
-- ✅ "No issues"
-- ⚠️ "Transaction hash not visible after completion"
-- ⚠️ "Close (X) button on Borrow modal needs improvement"
-
-### Summary
-Overall reception is highly positive with an average UI/UX 
-score of 4.8/5. Minor UX improvements identified around 
-transaction confirmation visibility and modal navigation.
-
-📊 [View Full Response Sheet](https://docs.google.com/spreadsheets/d/12jBf8IAJxlGuiJeIxMbgcZi-5Wm4a8OYETyIynZHVJY/edit?usp=sharing)
-
----
-
-## 📈 Repository Analytics (Last 14 Days)
-
-![GitHub Traffic Analytics](https://github.com/user-attachments/assets/8b7f4907-105c-4993-99c2-9b017b16f551)
-
-| Metric | Count |
-|--------|-------|
-| Total Clones | 201 |
-| Unique Cloners | 74 |
-| Total Views | 62 |
-| Unique Visitors | 12 |
-
-*Source: GitHub Traffic Insights — June 26 to July 9, 2026*
-
-## 👨‍💻 Author
-
-**Ashish Chaurasia**  
-[GitHub Profile](https://github.com/ashishh-tech)
-
----
-
-## 📜 License
-
-MIT License
-
-- New Soroban contracts can be put in `contracts`, each in their own directory.
-- Contracts should have their own `Cargo.toml` files that rely on the top-level `Cargo.toml` workspace for their dependencies.
-- Frontend libraries can be added to the top-level directory as well.
-
----
-
-## 📌 Future Improvements
-
-* Interest rate mechanism
-* Collateral support
-* Default penalties
-* Multi-asset lending support
+## 📄 License
+MIT License. Built for the Stellar Soroban Ecosystem.

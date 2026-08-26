@@ -20,7 +20,7 @@
                   "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M"
                 },
                 {
-                  "i128": "1000"
+                  "i128": "500"
                 }
               ]
             }
@@ -74,7 +74,7 @@
                       "symbol": "supplied"
                     },
                     "val": {
-                      "i128": "1000"
+                      "i128": "500"
                     }
                   }
                 ]
@@ -145,7 +145,7 @@
                         ]
                       },
                       "val": {
-                        "i128": "1000"
+                        "i128": "500"
                       }
                     }
                   ]

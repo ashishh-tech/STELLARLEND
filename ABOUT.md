@@ -1,86 +1,87 @@
-# About Peer-to-Peer Lending Stellar
+# About StellarLend Protocol
 
 ## 🎯 Mission
 
-To build a transparent, trustless, and decentralized lending platform on the Stellar blockchain that eliminates intermediaries and provides fair access to credit for everyone.
-
-## 📖 Overview
-
-**Peer-to-Peer Lending Stellar** is a smart contract-based lending platform that enables:
-
-- **Lenders** to offer loans and earn interest on their capital
-- **Borrowers** to access funds directly without bank approval
-- **Both parties** to interact trustlessly through blockchain automation
-
-## 🔐 Why Stellar?
-
-- ✅ Fast & cheap transactions (compared to Ethereum)
-- ✅ Built-in asset support with Stellar Network
-- ✅ High throughput - processes thousands of transactions per second
-- ✅ Developer-friendly with Soroban smart contracts
-- ✅ Growing ecosystem with Freighter wallet integration
-
-## 🏗️ Architecture
-
-### Smart Contract (Soroban)
-- Written in Rust
-- Deployed on Stellar Testnet
-- Manages loan creation, acceptance, and repayment
-- Transparent on-chain state for all transactions
-
-### Frontend Integration
-- Freighter Wallet for secure authentication
-- Web3 integration for contract interaction
-- User-friendly dashboard (coming soon)
-
-## 💡 Core Features
-
-1. **Loan Marketplace** - Browse and create loan offers
-2. **Instant Acceptance** - Borrowers accept loans in seconds
-3. **Automated Repayment** - Smart contract enforces terms
-4. **Transparent History** - All transactions visible on-chain
-5. **Low Fees** - Minimal transaction costs on Stellar
-
-## 📊 Deployed Contract
-
-- **Network:** Stellar Testnet
-- **Contract ID:** `CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS`
-- **Status:** ✅ Active & Functional
-
-## 🚀 Getting Started
-
-1. Clone the repository
-2. Install Stellar CLI
-3. Build and deploy locally
-4. Connect with Freighter wallet
-5. Start lending or borrowing!
-
-## 📚 Documentation
-
-- [README.md](README.md) - Complete project documentation
-- [EXPLORER_LINKS.md](EXPLORER_LINKS.md) - Contract explorer links
-- [Stellar Docs](https://developers.stellar.org/) - Official Stellar documentation
-
-## 🔄 Roadmap
-
-- Phase 1: ✅ Basic lending contracts
-- Phase 2: 🔄 Interest rate mechanisms
-- Phase 3: 🔄 Collateral support
-- Phase 4: 🔄 Default penalties & insurance
-- Phase 5: 🔄 Web dashboard & mobile app
-
-## 👥 Contributors
-
-- **Ashish Chaurasia** - Founder & Lead Developer
-
-## 📞 Support
-
-For questions or contributions, please open an issue or submit a pull request.
-
-## 📜 License
-
-MIT License - See LICENSE file for details
+To build a high-performance, trustless, and mathematically sound decentralized lending and liquidity protocol on the Stellar blockchain, empowering global users with fair access to non-custodial credit, algorithmic yield, and instant borrowing.
 
 ---
 
-**Built with ❤️ on Stellar Blockchain**
+## 📖 Overview
+
+**StellarLend** is a next-generation decentralized liquidity market on Stellar Soroban that enables:
+
+- **Lenders**: Supply multi-asset crypto collateral (XLM, USDC, EURC, WBTC) to earn continuous, compounding algorithmic yields.
+- **Borrowers**: Unlock instant liquidity against deposited collateral with deterministic LTV safety ratios and zero credit checks.
+- **Keepers / Liquidators**: Protect protocol solvency by liquidating undercollateralized accounts (Health Factor < 1.0) for an immediate **5.0% keeper bounty**.
+
+---
+
+## 🔐 Why Stellar & Soroban?
+
+- ⚡ **Sub-Second Finality**: Fast execution times with ultra-low deterministic network fees.
+- 💾 **Persistent State Scaling**: Isolated per-user ledger entries with automatic TTL renewal.
+- 🌐 **Native Asset Integration**: Direct interoperability with Stellar Asset Contracts (SAC) and SEP-41 tokens.
+- 🔒 **Rust Type Safety**: Provably secure `#![no_std]` smart contracts running on WebAssembly (Wasm).
+
+---
+
+## 🏗️ Protocol Architecture
+
+```
+                               ┌────────────────────────────────┐
+                               │     Freighter Wallet / Web3    │
+                               └───────────────┬────────────────┘
+                                               │
+                                               ▼
+                               ┌────────────────────────────────┐
+                               │   Next.js 16 Glassmorphism UI   │
+                               │   (Portfolio/Markets/Keepers)  │
+                               └───────────────┬────────────────┘
+                                               │
+                                               ▼
+                               ┌────────────────────────────────┐
+                               │   Stellar Soroban Contract     │
+                               │   (Persistent TTL Storage)     │
+                               └───────┬───────────────┬────────┘
+                                       │               │
+                     ┌─────────────────┴─┐           ┌─┴───────────────────┐
+                     ▼                   ▼           ▼                     ▼
+             ┌───────────────┐   ┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+             │  XLM Reserve  │   │ USDC Reserve  │ │ EURC Reserve  │ │ WBTC Reserve  │
+             │  (75% LTV)    │   │  (85% LTV)    │ │  (80% LTV)    │ │  (70% LTV)    │
+             └───────────────┘   └───────────────┘ └───────────────┘ └───────────────┘
+```
+
+### Storage Scaling Model:
+1. **Global Configuration & Reserves**: Stored in `instance()` storage with active TTL renewals.
+2. **User Positions & Balances**: Stored in dedicated `persistent()` storage (`DataKey::UserPosition(User, Token)`) with `extend_ttl()`. This eliminates the 64KB single-ledger footprint bottleneck.
+
+---
+
+## 💡 Core Features
+
+1. **Persistent Multi-User Scalability**: Infinite account capacity with automatic TTL management.
+2. **Dynamic Kink Interest Rate Model**: Supply and borrow APYs mathematically adjust based on real-time capital utilization.
+3. **Liquidation Engine & Keeper Bounties**: 5% liquidation bonuses for automated protocol solvency.
+4. **Interactive SVG Health Factor Meter**: Visual arc gauge classifying positions as Safe, Moderate, Risky, or Liquidatable.
+5. **Yield & Volatility Shock Simulator**: Scenario forecasting for price crashes, compounding returns, and liquidation limits.
+6. **Built-in Testnet Faucet**: Direct Friendbot integration for testnet onboarding.
+
+---
+
+## 📊 Contract Deployment
+
+- **Network**: Stellar Testnet
+- **Contract ID**: `CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS`
+- **Explorer**: [Stellar Expert Contract Explorer](https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS)
+- **Status**: ✅ Scalable, Tested & Verified
+
+---
+
+## 👥 Contributors
+
+- **Ashish Chaurasia** — Founder & Protocol Architect
+
+## 📜 License
+
+MIT License. Built with ❤️ on the Stellar Soroban Ecosystem.

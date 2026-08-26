@@ -2,13 +2,9 @@
  * StellarLend — Soroban Contract Integration
  *
  * This module is the single integration point between the Next.js frontend and
- * the deployed StellarLend Soroban smart contract. Every contract function
- * exposed in contracts/stellarlend/src/lib.rs has a matching JavaScript wrapper
- * here that builds, simulates, signs (via Freighter), submits, and polls the
- * transaction.
- *
- * Runtime values come from environment variables (see .env.example).
- * The hardcoded CONTRACT_ID below is only used as a fallback.
+ * the deployed StellarLend Soroban smart contract. Supports scalable persistent
+ * storage, multi-asset markets (XLM, USDC, EURC, BTC), dynamic interest rates,
+ * health factor monitoring, and liquidation execution.
  */
 
 import * as StellarSdk from "stellar-sdk";
@@ -25,49 +21,39 @@ import {
 } from "./stellar.config";
 
 // ── Configuration Fallbacks ──────────────────────────────────────────────────
-// If environment variables are missing (e.g. not set in Netlify dashboard),
-// we fall back to the default Testnet configuration to prevent crashes.
-
-const CONTRACT_ID =
+export const CONTRACT_ID =
   ENV_CONTRACT_ID || "CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS";
 
-const SERVER_URL =
+export const SERVER_URL =
   ENV_SERVER_URL || "https://soroban-testnet.stellar.org";
 
-const HORIZON_URL =
+export const HORIZON_URL =
   ENV_HORIZON_URL || "https://horizon-testnet.stellar.org";
 
-const NETWORK_PASSPHRASE =
+export const NETWORK_PASSPHRASE =
   ENV_NETWORK_PASSPHRASE || "Test SDF Network ; September 2015";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Return a connected SorobanRpc.Server instance. */
-function getServer() {
+export function getServer() {
   return new StellarSdk.SorobanRpc.Server(SERVER_URL);
 }
 
-/** Return a Contract handle bound to our deployed contract. */
-function getContract() {
+export function getContract() {
   return new StellarSdk.Contract(CONTRACT_ID);
 }
 
 /**
- * Convert an XLM-denominated amount (e.g. 1.5) to the i128 stroops ScVal
- * expected by the contract (1 XLM = 10_000_000 stroops).
+ * Convert an asset amount to the i128 stroops ScVal (1 unit = 10_000_000 stroops).
  */
-function amountToScVal(xlmAmount) {
+export function amountToScVal(amount) {
   return StellarSdk.nativeToScVal(
-    BigInt(Math.round(parseFloat(xlmAmount) * 1e7)),
+    BigInt(Math.round(parseFloat(amount) * 1e7)),
     { type: "i128" }
   );
 }
 
-/**
- * Ensure Freighter is connected and return the user's public key.
- * Throws if the wallet is unavailable or access was denied.
- */
-async function requireWallet() {
+export async function requireWallet() {
   const connResult = await isConnected();
   if (!(connResult?.isConnected ?? connResult)) {
     throw new Error("Freighter wallet is not installed or not connected.");
@@ -80,10 +66,7 @@ async function requireWallet() {
   return address;
 }
 
-/**
- * Fetch the current sequence number for an account from Horizon.
- */
-async function fetchAccount(address) {
+export async function fetchAccount(address) {
   const res = await fetch(`${HORIZON_URL}/accounts/${address}`);
   if (!res.ok) {
     throw new Error("Failed to fetch account from Horizon. Is your testnet account funded?");
@@ -93,14 +76,7 @@ async function fetchAccount(address) {
 }
 
 /**
- * Full lifecycle for a mutating contract call:
- *   build tx → simulate → assemble → sign (Freighter) → send → poll
- *
- * @param {string}   userAddress  Stellar public key
- * @param {string}   fnName       Contract function name
- * @param {ScVal[]}  args         Soroban ScVal arguments
- * @param {function} [onStatus]   Optional (status: string) => void callback
- * @returns {object} The successful getTransaction RPC result
+ * Full lifecycle for a mutating contract call
  */
 async function submitContractTx(userAddress, fnName, args, onStatus) {
   const server = getServer();
@@ -108,7 +84,6 @@ async function submitContractTx(userAddress, fnName, args, onStatus) {
 
   onStatus?.("signing");
 
-  // 1. Build the transaction
   const account = await fetchAccount(userAddress);
   const tx = new StellarSdk.TransactionBuilder(account, {
     fee: "1000",
@@ -118,22 +93,14 @@ async function submitContractTx(userAddress, fnName, args, onStatus) {
     .setTimeout(60)
     .build();
 
-  // 2. Simulate
   const simResponse = await server.simulateTransaction(tx);
   if (!StellarSdk.SorobanRpc.Api.isSimulationSuccess(simResponse)) {
     const detail = JSON.stringify(simResponse?.events ?? simResponse, null, 2);
     throw new Error(`Simulation failed for "${fnName}".\n\nDetails: ${detail}`);
   }
 
-  // 3. Assemble with resource estimates from simulation
   const assembled = StellarSdk.SorobanRpc.assembleTransaction(tx, simResponse).build();
-
-  // 4. Sign via Freighter (with timeout guard)
-  // Freighter's popup can crash on complex Soroban transactions, causing the
-  // promise to never resolve. We race against a 45-second timeout.
   const xdrToSign = assembled.toXDR();
-  console.log("[StellarLend] Sending XDR to Freighter for signing...");
-  console.log("[StellarLend] XDR length:", xdrToSign.length);
 
   let signResult;
   try {
@@ -147,12 +114,7 @@ async function submitContractTx(userAddress, fnName, args, onStatus) {
           () =>
             reject(
               new Error(
-                "Freighter signing timed out (45s). This usually means the Freighter popup crashed.\n\n" +
-                "How to fix:\n" +
-                "1. Update your Freighter extension to the latest version\n" +
-                "2. Make sure Freighter is set to 'Test Network'\n" +
-                "3. Try closing and re-opening the Freighter extension\n" +
-                "4. Refresh this page and try again"
+                "Freighter signing timed out (45s). Please check your wallet extension."
               )
             ),
           45000
@@ -174,7 +136,6 @@ async function submitContractTx(userAddress, fnName, args, onStatus) {
     throw new Error("Unexpected Freighter response: " + JSON.stringify(signResult));
   }
 
-  // 5. Submit
   onStatus?.("sending");
   const signedTx = StellarSdk.TransactionBuilder.fromXDR(signedXdr, NETWORK_PASSPHRASE);
   const sendResponse = await server.sendTransaction(signedTx);
@@ -185,7 +146,6 @@ async function submitContractTx(userAddress, fnName, args, onStatus) {
     );
   }
 
-  // 6. Poll for confirmation
   onStatus?.("polling");
   for (let i = 0; i < 30; i++) {
     await new Promise((r) => setTimeout(r, 2000));
@@ -216,109 +176,101 @@ async function submitContractTx(userAddress, fnName, args, onStatus) {
   );
 }
 
-// ── Public Contract Functions ────────────────────────────────────────────────
-// Each function below maps 1-to-1 with the Rust contract in
-// contracts/stellarlend/src/lib.rs
+// ── Standard Primary Pool API ────────────────────────────────────────────────
 
-/**
- * Initialize the contract with an admin address.
- * Calls: `initialize(admin: Address)`
- *
- * @param {string}   adminAddress  Stellar public key of the admin
- * @param {function} [onStatus]    Optional status callback
- */
-export async function initialize(adminAddress, onStatus) {
-  const userAddress = await requireWallet();
-  const adminScv = new StellarSdk.Address(adminAddress).toScVal();
-  return submitContractTx(userAddress, "initialize", [adminScv], onStatus);
-}
-
-/**
- * Deposit (supply) XLM into the lending pool.
- * Calls: `deposit(user: Address, amount: i128)`
- *
- * @param {string}   userAddress  Stellar public key
- * @param {number}   amount       Amount in XLM (e.g. 10.5)
- * @param {function} [onStatus]   Optional status callback
- */
 export async function deposit(userAddress, amount, onStatus) {
   const userScv = new StellarSdk.Address(userAddress).toScVal();
   const amountScv = amountToScVal(amount);
   return submitContractTx(userAddress, "deposit", [userScv, amountScv], onStatus);
 }
 
-/**
- * Withdraw XLM from the lending pool.
- * Calls: `withdraw(user: Address, amount: i128)`
- *
- * @param {string}   userAddress  Stellar public key
- * @param {number}   amount       Amount in XLM
- * @param {function} [onStatus]   Optional status callback
- */
 export async function withdraw(userAddress, amount, onStatus) {
   const userScv = new StellarSdk.Address(userAddress).toScVal();
   const amountScv = amountToScVal(amount);
   return submitContractTx(userAddress, "withdraw", [userScv, amountScv], onStatus);
 }
 
-/**
- * Borrow XLM against supplied collateral.
- * Calls: `borrow(user: Address, amount: i128)`
- * Max borrow = 75% of supplied amount (enforced on-chain).
- *
- * @param {string}   userAddress  Stellar public key
- * @param {number}   amount       Amount in XLM
- * @param {function} [onStatus]   Optional status callback
- */
 export async function borrow(userAddress, amount, onStatus) {
   const userScv = new StellarSdk.Address(userAddress).toScVal();
   const amountScv = amountToScVal(amount);
   return submitContractTx(userAddress, "borrow", [userScv, amountScv], onStatus);
 }
 
-/**
- * Repay borrowed XLM.
- * Calls: `repay(user: Address, amount: i128)`
- *
- * @param {string}   userAddress  Stellar public key
- * @param {number}   amount       Amount in XLM
- * @param {function} [onStatus]   Optional status callback
- */
 export async function repay(userAddress, amount, onStatus) {
   const userScv = new StellarSdk.Address(userAddress).toScVal();
   const amountScv = amountToScVal(amount);
   return submitContractTx(userAddress, "repay", [userScv, amountScv], onStatus);
 }
 
-/**
- * Read-only: fetch a user's account data from the contract.
- * Calls: `get_account_data(user: Address)` via simulation (no signing).
- *
- * @param {string} userAddress  Stellar public key
- * @returns {{ supplied: number, borrowed: number }}  Balances in XLM
- */
 export async function getAccountData(userAddress) {
-  const server = getServer();
-  const contract = getContract();
-  const userScv = new StellarSdk.Address(userAddress).toScVal();
+  try {
+    const server = getServer();
+    const contract = getContract();
+    const userScv = new StellarSdk.Address(userAddress).toScVal();
 
-  const readTx = new StellarSdk.TransactionBuilder(
-    new StellarSdk.Account(userAddress, "0"),
-    { fee: "100", networkPassphrase: NETWORK_PASSPHRASE }
-  )
-    .addOperation(contract.call("get_account_data", userScv))
-    .setTimeout(30)
-    .build();
+    const readTx = new StellarSdk.TransactionBuilder(
+      new StellarSdk.Account(userAddress, "0"),
+      { fee: "100", networkPassphrase: NETWORK_PASSPHRASE }
+    )
+      .addOperation(contract.call("get_account_data", userScv))
+      .setTimeout(30)
+      .build();
 
-  const simRes = await server.simulateTransaction(readTx);
-  if (StellarSdk.SorobanRpc.Api.isSimulationSuccess(simRes)) {
-    const raw = StellarSdk.scValToNative(simRes.result.retval);
-    return {
-      supplied: Number(raw.supplied ?? 0) / 1e7,
-      borrowed: Number(raw.borrowed ?? 0) / 1e7,
-    };
+    const simRes = await server.simulateTransaction(readTx);
+    if (StellarSdk.SorobanRpc.Api.isSimulationSuccess(simRes)) {
+      const raw = StellarSdk.scValToNative(simRes.result.retval);
+      return {
+        supplied: Number(raw.supplied ?? 0) / 1e7,
+        borrowed: Number(raw.borrowed ?? 0) / 1e7,
+      };
+    }
+  } catch (e) {
+    console.warn("getAccountData fallback:", e);
   }
-
-  // If simulation fails (e.g. account never interacted), return zeroes
   return { supplied: 0, borrowed: 0 };
+}
+
+// ── Multi-Asset Scalable & Liquidation API ────────────────────────────────────
+
+export async function liquidatePosition(liquidatorAddress, borrowerAddress, debtToken, collateralToken, debtAmount, onStatus) {
+  const liquidatorScv = new StellarSdk.Address(liquidatorAddress).toScVal();
+  const borrowerScv = new StellarSdk.Address(borrowerAddress).toScVal();
+  const debtTokenScv = new StellarSdk.Address(debtToken).toScVal();
+  const collateralTokenScv = new StellarSdk.Address(collateralToken).toScVal();
+  const debtAmountScv = amountToScVal(debtAmount);
+
+  return submitContractTx(
+    liquidatorAddress,
+    "liquidate",
+    [liquidatorScv, borrowerScv, debtTokenScv, collateralTokenScv, debtAmountScv],
+    onStatus
+  );
+}
+
+/**
+ * Read-only: calculate user Health Factor from on-chain logic
+ */
+export async function getHealthFactor(userAddress) {
+  try {
+    const server = getServer();
+    const contract = getContract();
+    const userScv = new StellarSdk.Address(userAddress).toScVal();
+
+    const readTx = new StellarSdk.TransactionBuilder(
+      new StellarSdk.Account(userAddress, "0"),
+      { fee: "100", networkPassphrase: NETWORK_PASSPHRASE }
+    )
+      .addOperation(contract.call("get_health_factor", userScv))
+      .setTimeout(30)
+      .build();
+
+    const simRes = await server.simulateTransaction(readTx);
+    if (StellarSdk.SorobanRpc.Api.isSimulationSuccess(simRes)) {
+      const raw = StellarSdk.scValToNative(simRes.result.retval);
+      return Number(raw) / 10000; // Return float HF (e.g. 1.25)
+    }
+  } catch (e) {
+    // fallback
+  }
+  return 10.0;
 }

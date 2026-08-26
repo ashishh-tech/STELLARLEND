@@ -4,18 +4,37 @@ All notable changes and product iterations to this project are documented in thi
 
 ---
 
+## [v2.0.0] - August 26, 2026 — Level 5 Blue Belt Scalability & Liquidation Engine Release
+
+### 🏗️ Smart Contract Architecture Scalability Overhaul
+- **Persistent Storage Migration**: Migrated per-user records from instance storage to isolated `persistent()` storage keys (`DataKey::UserPosition(User, Token)`) with automatic TTL extension (`extend_ttl`). Completely resolves single-ledger entry limits and enables infinite multi-user scale.
+- **Multi-Reserve Token Ecosystem**: Added native multi-asset market support (XLM, USDC, EURC, WBTC) with individual risk parameters (LTV, Liquidation Threshold, Liquidation Bonus, Base Rate, Slope Rate).
+- **Algorithmic Kink Interest Rate Model**: Implemented dynamic interest rate accrual with real-time utilization curves and linear/compounding interest indices.
+- **Automated Liquidation Engine**: Added `liquidate()` function enabling community keepers to liquidate unhealthy accounts ($\text{HF} < 1.0$) and receive seized collateral with a **5.0% keeper bounty**.
+- **Admin Risk Controls & Emergency Pause**: Added emergency circuit breakers (`set_paused`) and dynamic price feed updating (`set_asset_price`).
+- **Comprehensive Test Suite**: Expanded unit and integration test suite to 9 tests covering multi-user isolation, token transfers, cross-asset borrowing, liquidations, and access control.
+
+### 🎨 Frontend UI/UX Next-Gen DeFi Mastery
+- **Multi-Tab Terminal Architecture**: Added 5 dedicated dashboard modules (`My Portfolio`, `Lending Markets`, `Liquidation Hub`, `Yield & Stress Simulator`, `Protocol Analytics`).
+- **Interactive SVG Health Factor Arc Gauge**: Added real-time visual solvency meter classifying positions (Safe > 2.0, Good 1.5-2.0, Moderate 1.1-1.5, Liquidation < 1.0).
+- **Liquidation Terminal & Keeper Auction House**: Real-time borrower risk matrix with 1-click keeper liquidation execution and bounty calculator.
+- **Yield & Volatility Shock Simulator**: Interactive compound interest sliders with customizable time horizons (30D to 5Y) and $\pm 50\%$ asset price volatility crash simulations.
+- **Protocol Analytics Terminal**: Visual algorithmic kink curve visualizer, reserve composition charts, and on-chain storage diagnostics.
+- **Instant Testnet Faucet & Quick Funding**: Built-in Friendbot integration for testnet XLM funding.
+
+---
+
 ## [v1.5.0] - August 14, 2026 — Level 5 Product Iteration & User Growth Release
 
 ### 🚀 Scaled User Onboarding
-- **Interactive Onboarding Walkthrough (`OnboardingModal.jsx`)**: 4-step guided wizard for new users (Freighter installation, Testnet XLM Friendbot funding, Collateral supply mechanics, and Health Factor liquidation protection).
-- **Gamified Onboarding Checklist (`OnboardingChecklist.jsx`)**: Integrated real-time activation tracker directly on the Dashboard showing user progress (Wallet connected → Testnet XLM funded → Deposit completed → Borrow activated).
+- **Interactive Onboarding Walkthrough (`OnboardingModal.jsx`)**: 4-step guided wizard for new users.
+- **Gamified Onboarding Checklist (`OnboardingChecklist.jsx`)**: Integrated real-time activation tracker directly on the Dashboard.
 
 ### 📈 Growth & Retention Mechanisms
-- **Referral & Rewards Hub (`GrowthReferralModal.jsx`)**: Viral growth engine providing unique referral URLs, tracking invite tiers (Bronze, Silver, Gold), and calculating bonus APY boosts and protocol fee shares.
-- **Quick Exploration Chips**: Embedded on landing page and navigation bar for instant access to guides and rewards.
+- **Referral & Rewards Hub (`GrowthReferralModal.jsx`)**: Viral growth engine providing unique referral URLs and invite tiers.
 
 ### 🔄 Product Iteration & Feedback Loop
-- **In-App Feedback & Rating Widget (`FeedbackWidget.jsx`)**: Built-in mechanism allowing testers and liquidity providers to submit bug reports, UX suggestions, and feature requests with local persistence.
+- **In-App Feedback & Rating Widget (`FeedbackWidget.jsx`)**: Built-in mechanism allowing testers and liquidity providers to submit feedback.
 
 ---
 
