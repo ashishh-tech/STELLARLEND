@@ -4,6 +4,15 @@ All notable changes and product iterations to this project are documented in thi
 
 ---
 
+## [v2.0.1] - August 28, 2026 — Soroban Testnet Contract Deployment & Verification
+
+### 🚀 On-Chain Deployment & Verification
+- **Smart Contract Deployed**: Freshly deployed to Stellar Testnet (Contract ID: `CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU`).
+- **Contract Initialized**: Initialized on Testnet with verified persistent storage and admin controls.
+- **Frontend & Environment Sync**: Synchronized all client fallbacks, environment configurations, and explorer verification links.
+
+---
+
 ## [v2.0.0] - August 26, 2026 — Level 5 Blue Belt Scalability & Liquidation Engine Release
 
 ### 🏗️ Smart Contract Architecture Scalability Overhaul

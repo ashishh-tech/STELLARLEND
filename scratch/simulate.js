@@ -2,7 +2,7 @@ const StellarSdk = require('stellar-sdk');
 
 async function run() {
   const SERVER_URL = 'https://soroban-testnet.stellar.org';
-  const CONTRACT_ID = 'CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS';
+  const CONTRACT_ID = 'CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU';
   const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
   
   // Dummy user address

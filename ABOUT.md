@@ -72,8 +72,8 @@ To build a high-performance, trustless, and mathematically sound decentralized l
 ## 📊 Contract Deployment
 
 - **Network**: Stellar Testnet
-- **Contract ID**: `CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS`
-- **Explorer**: [Stellar Expert Contract Explorer](https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS)
+- **Contract ID**: `CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU`
+- **Explorer**: [Stellar Expert Contract Explorer](https://stellar.expert/explorer/testnet/contract/CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU)
 - **Status**: ✅ Scalable, Tested & Verified
 
 ---

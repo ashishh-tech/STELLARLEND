@@ -22,7 +22,7 @@ import {
 
 // ── Configuration Fallbacks ──────────────────────────────────────────────────
 export const CONTRACT_ID =
-  ENV_CONTRACT_ID || "CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS";
+  ENV_CONTRACT_ID || "CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU";
 
 export const SERVER_URL =
   ENV_SERVER_URL || "https://soroban-testnet.stellar.org";

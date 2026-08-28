@@ -109,7 +109,7 @@ export default function Navbar({
             )}
 
             <a
-              href="https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS"
+              href="https://stellar.expert/explorer/testnet/contract/CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU"
               target="_blank"
               rel="noreferrer"
               className="hidden xl:flex items-center gap-1 text-slate-400 hover:text-white transition-colors text-xs font-mono px-2 py-1.5"

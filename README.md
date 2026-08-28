@@ -116,11 +116,11 @@ All operations are executed on-chain using Soroban smart contracts, ensuring tru
 ## 🌐 Deployed Smart Contract (Testnet)
 
 ### 🔗 **Contract Explorer (Stellar Expert)**
-https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS
+https://stellar.expert/explorer/testnet/contract/CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU
 
 ### **Contract ID**
 ```
-CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS
+CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU
 ```
 
 ---

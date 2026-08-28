@@ -75,7 +75,7 @@ export default function Landing({ onConnect, onOpenOnboarding, onOpenReferral, o
           </button>
           
           <a
-            href="https://stellar.expert/explorer/testnet/contract/CD4M6SRU32V6UPBXLWYI6HU74RJUYTJFOCX5AFR56LF5IXLDSZSM2TYS"
+            href="https://stellar.expert/explorer/testnet/contract/CAFIUXARRNE45E3ZWSKSR3B3G5ZJYR3YMBRJJXTOFFFUN6CHRR3SLQSU"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto px-6 py-4 bg-navy-900/80 hover:bg-navy-900 border border-white/10 hover:border-brand-emerald/40 text-slate-200 rounded-2xl font-bold font-headline text-base transition-all flex items-center justify-center gap-2"
